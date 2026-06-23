@@ -36,7 +36,14 @@ class CharacterService:
     async def get_by_id(self, id: str) -> dict | None:
         return await self.repo.find_by_id(id)
 
-    async def update(self, id: str, data: CharacterUpdate) -> dict | None:
+    async def get_by_id_for_user(self, id: str, user_id: str) -> dict | None:
+        return await self.repo.find_by_id_for_user(id, user_id)
+
+    async def update(self, id: str, data: CharacterUpdate, user_id: str | None = None) -> dict | None:
+        if user_id:
+            existing = await self.repo.find_by_id_for_user(id, user_id)
+            if not existing:
+                return None
         update_data = {k: v for k, v in data.model_dump().items() if v is not None}
         if not update_data:
             return await self.get_by_id(id)

@@ -20,15 +20,21 @@ def _section_repo(request: Request) -> DaySectionRepository:
     return DaySectionRepository(request.app.state.db)
 
 
+async def _get_owned_batch(repo: BatchRepository, batch_id: str, user_id: str) -> dict:
+    batch = await repo.find_by_id_for_user(batch_id, user_id)
+    if not batch:
+        raise HTTPException(404, "Batch not found")
+    return batch
+
+
 @router.get("")
 async def list_batches(request: Request, character_id: str | None = None, current_user: str = Depends(require_auth)):
     repo = _batch_repo(request)
     if character_id:
-        batches = await repo.find_by_character(character_id)
+        batches = await repo.find_by_character(character_id, user_id=current_user)
     else:
         batches = await repo.find_all(user_id=current_user)
 
-    # Enrich with character name
     char_repo = CharacterRepository(request.app.state.db)
     char_cache: dict[str, str] = {}
     for b in batches:
@@ -42,7 +48,7 @@ async def list_batches(request: Request, character_id: str | None = None, curren
 
 @router.post("", status_code=201)
 async def create_batch(body: BatchCreate, request: Request, current_user: str = Depends(require_auth)):
-    from datetime import datetime as dt, timedelta
+    from datetime import datetime as dt
     start = dt.strptime(body.startDate, "%Y-%m-%d")
     end = dt.strptime(body.endDate, "%Y-%m-%d")
     if end < start:
@@ -65,47 +71,42 @@ async def create_batch(body: BatchCreate, request: Request, current_user: str = 
     )
     doc = batch.model_dump(by_alias=True)
     doc["_id"] = ObjectId(doc["_id"])
-    if current_user:
-        doc["userId"] = current_user
+    doc["userId"] = current_user
     await request.app.state.db.batches.insert_one(doc)
     doc["_id"] = str(doc["_id"])
     return doc
 
 
 @router.get("/{batch_id}")
-async def get_batch(batch_id: str, request: Request):
-    batch = await _batch_repo(request).find_by_id(batch_id)
-    if not batch:
-        raise HTTPException(404, "Batch not found")
+async def get_batch(batch_id: str, request: Request, current_user: str = Depends(require_auth)):
+    batch = await _get_owned_batch(_batch_repo(request), batch_id, current_user)
     char = await CharacterRepository(request.app.state.db).find_by_id(batch["characterId"])
     batch["characterName"] = char["name"] if char else "Unknown"
     return batch
 
 
 @router.put("/{batch_id}")
-async def update_batch(batch_id: str, body: BatchUpdate, request: Request):
+async def update_batch(batch_id: str, body: BatchUpdate, request: Request, current_user: str = Depends(require_auth)):
+    repo = _batch_repo(request)
+    await _get_owned_batch(repo, batch_id, current_user)
     update_data = {k: v for k, v in body.model_dump().items() if v is not None}
     if not update_data:
-        return await _batch_repo(request).find_by_id(batch_id)
+        return await repo.find_by_id_for_user(batch_id, current_user)
     update_data["updatedAt"] = datetime.utcnow()
-    await _batch_repo(request).update_one(batch_id, {"$set": update_data})
-    return await _batch_repo(request).find_by_id(batch_id)
+    await repo.update_one(batch_id, {"$set": update_data})
+    return await repo.find_by_id_for_user(batch_id, current_user)
 
 
 @router.delete("/{batch_id}", status_code=204)
-async def delete_batch(batch_id: str, request: Request):
+async def delete_batch(batch_id: str, request: Request, current_user: str = Depends(require_auth)):
+    await _get_owned_batch(_batch_repo(request), batch_id, current_user)
     await _section_repo(request).delete_by_batch(batch_id)
-    deleted = await _batch_repo(request).delete_one(batch_id)
-    if not deleted:
-        raise HTTPException(404, "Batch not found")
+    await _batch_repo(request).delete_one(batch_id)
 
 
 @router.post("/{batch_id}/duplicate", status_code=201)
-async def duplicate_batch(batch_id: str, request: Request):
-    """Clone a batch — same character, sections, and content summary. Dates stay the same; rename and adjust dates after creation."""
-    original = await _batch_repo(request).find_by_id(batch_id)
-    if not original:
-        raise HTTPException(404, "Batch not found")
+async def duplicate_batch(batch_id: str, request: Request, current_user: str = Depends(require_auth)):
+    original = await _get_owned_batch(_batch_repo(request), batch_id, current_user)
 
     from datetime import datetime as dt
     start_str = original["startDate"]
@@ -128,16 +129,15 @@ async def duplicate_batch(batch_id: str, request: Request):
     )
     doc = new_batch.model_dump(by_alias=True)
     doc["_id"] = ObjectId(doc["_id"])
+    doc["userId"] = current_user
     await request.app.state.db.batches.insert_one(doc)
     doc["_id"] = str(doc["_id"])
     return doc
 
 
 @router.post("/{batch_id}/generate", status_code=202)
-async def generate_batch(batch_id: str, request: Request, background_tasks: BackgroundTasks):
-    batch = await _batch_repo(request).find_by_id(batch_id)
-    if not batch:
-        raise HTTPException(404, "Batch not found")
+async def generate_batch(batch_id: str, request: Request, background_tasks: BackgroundTasks, current_user: str = Depends(require_auth)):
+    batch = await _get_owned_batch(_batch_repo(request), batch_id, current_user)
     if batch["status"] == BatchStatus.GENERATING:
         raise HTTPException(409, "Generation already in progress")
 
@@ -147,10 +147,8 @@ async def generate_batch(batch_id: str, request: Request, background_tasks: Back
 
 
 @router.post("/{batch_id}/generate/sync")
-async def generate_batch_sync(batch_id: str, request: Request):
-    batch = await _batch_repo(request).find_by_id(batch_id)
-    if not batch:
-        raise HTTPException(404, "Batch not found")
+async def generate_batch_sync(batch_id: str, request: Request, current_user: str = Depends(require_auth)):
+    await _get_owned_batch(_batch_repo(request), batch_id, current_user)
     service = GenerationService(request.app.state.db)
     try:
         result = await service.generate_batch(batch_id)
@@ -160,9 +158,9 @@ async def generate_batch_sync(batch_id: str, request: Request):
 
 
 @router.get("/{batch_id}/days")
-async def get_batch_days(batch_id: str, request: Request):
+async def get_batch_days(batch_id: str, request: Request, current_user: str = Depends(require_auth)):
+    await _get_owned_batch(_batch_repo(request), batch_id, current_user)
     sections = await _section_repo(request).find_by_batch(batch_id)
-    # Group by dayNo
     days: dict[int, dict] = {}
     for sec in sections:
         day_no = sec["dayNo"]
@@ -173,7 +171,8 @@ async def get_batch_days(batch_id: str, request: Request):
 
 
 @router.get("/{batch_id}/days/{day_no}")
-async def get_batch_day(batch_id: str, day_no: int, request: Request):
+async def get_batch_day(batch_id: str, day_no: int, request: Request, current_user: str = Depends(require_auth)):
+    await _get_owned_batch(_batch_repo(request), batch_id, current_user)
     sections = await _section_repo(request).find_by_batch_and_day(batch_id, day_no)
     if not sections:
         raise HTTPException(404, "Day not found")
@@ -181,11 +180,8 @@ async def get_batch_day(batch_id: str, day_no: int, request: Request):
 
 
 @router.post("/{batch_id}/days/{day_no}/sections/{section_name}/generate")
-async def regenerate_section(batch_id: str, day_no: int, section_name: str, request: Request):
-    """Regenerate a single day+section without touching the rest of the batch."""
-    batch = await _batch_repo(request).find_by_id(batch_id)
-    if not batch:
-        raise HTTPException(404, "Batch not found")
+async def regenerate_section(batch_id: str, day_no: int, section_name: str, request: Request, current_user: str = Depends(require_auth)):
+    await _get_owned_batch(_batch_repo(request), batch_id, current_user)
     service = GenerationService(request.app.state.db)
     try:
         result = await service.regenerate_section(batch_id, day_no, section_name)

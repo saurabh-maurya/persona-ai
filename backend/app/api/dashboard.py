@@ -1,19 +1,20 @@
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Request, Depends
 from app.repositories.character_repository import CharacterRepository
 from app.repositories.batch_repository import BatchRepository
 from app.services.gemini_service import GeminiService
+from app.dependencies import require_auth
 
 router = APIRouter(prefix="/dashboard", tags=["dashboard"])
 
 
 @router.get("")
-async def dashboard(request: Request):
+async def dashboard(request: Request, current_user: str = Depends(require_auth)):
     db = request.app.state.db
     char_repo = CharacterRepository(db)
     batch_repo = BatchRepository(db)
 
-    chars = await char_repo.find_all()
-    batches = await batch_repo.find_all()
+    chars = await char_repo.find_all(user_id=current_user)
+    batches = await batch_repo.find_all(user_id=current_user)
 
     recent_batches = []
     char_map = {str(c["_id"]): c["name"] for c in chars}
@@ -41,7 +42,6 @@ async def dashboard(request: Request):
 
 @router.post("/test-ai")
 async def test_ai():
-    """Quick AI connectivity test — returns provider, model, and latency."""
     try:
         svc = GeminiService()
         result = await svc.ping()

@@ -192,6 +192,50 @@
       font-weight: 400;
     }
 
+    /* ── Tabs ── */
+    .auth-tabs {
+      display: flex;
+      gap: 0.25rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 10px;
+      padding: 0.25rem;
+      margin-bottom: 1.75rem;
+    }
+    .auth-tab {
+      flex: 1;
+      padding: 0.5rem;
+      background: none;
+      border: none;
+      border-radius: 8px;
+      color: #6b6b82;
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+    .auth-tab.active {
+      background: rgba(124,107,255,0.18);
+      color: #c4beff;
+    }
+    .auth-tab:hover:not(.active) { background: rgba(255,255,255,0.05); color: #a0a0b8; }
+
+    /* ── Success banner ── */
+    .login-success {
+      display: none;
+      align-items: flex-start;
+      gap: 0.625rem;
+      background: rgba(52,211,153,0.1);
+      border: 1px solid rgba(52,211,153,0.3);
+      border-left: 3px solid #34d399;
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+      font-size: 0.8125rem;
+      color: #6ee7b7;
+      margin-bottom: 1.25rem;
+    }
+    .login-success.visible { display: flex; }
+
     /* ── Error banner ── */
     .login-error {
       display: none;
@@ -469,7 +513,13 @@
         </div>
       </div>
       <div class="login-logo__name">Persona AI Studio</div>
-      <div class="login-logo__sub">Sign in to your workspace</div>
+      <div class="login-logo__sub" id="card-subtitle">Sign in to your workspace</div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tab-login" onclick="switchTab('login')">Sign In</button>
+      <button class="auth-tab" id="tab-register" onclick="switchTab('register')">Register</button>
     </div>
 
     <!-- Error -->
@@ -480,67 +530,42 @@
       <span id="login-error-text"></span>
     </div>
 
-    <!-- Form -->
+    <!-- Success (register) -->
+    <div class="login-success" id="login-success" role="status">
+      <svg width="15" height="15" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+      </svg>
+      <span id="login-success-text"></span>
+    </div>
+
+    <!-- LOGIN FORM -->
     <form class="login-form" id="login-form" onsubmit="doLogin(event)" novalidate>
 
-      <!-- Username -->
       <div class="field-group">
         <label class="field-label" for="username">Username</label>
         <div class="input-wrap">
           <span class="input-icon" aria-hidden="true">
-            <svg viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
-            </svg>
+            <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/></svg>
           </span>
-          <input
-            class="field-input"
-            type="text"
-            id="username"
-            name="username"
-            placeholder="Enter your username"
-            autocomplete="username"
-            autocapitalize="none"
-            spellcheck="false"
-            autofocus
-            required
-            aria-required="true"
-          />
+          <input class="field-input" type="text" id="username" name="username"
+            placeholder="Enter your username" autocomplete="username"
+            autocapitalize="none" spellcheck="false" autofocus required aria-required="true"/>
         </div>
       </div>
 
-      <!-- Password -->
       <div class="field-group field-group--last">
         <label class="field-label" for="password">Password</label>
         <div class="input-wrap">
           <span class="input-icon" aria-hidden="true">
-            <svg viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
-            </svg>
+            <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg>
           </span>
-          <input
-            class="field-input field-input--password"
-            type="password"
-            id="password"
-            name="password"
-            placeholder="Enter your password"
-            autocomplete="current-password"
-            required
-            aria-required="true"
-          />
-          <button
-            type="button"
-            class="password-toggle"
-            id="pw-toggle"
-            onclick="togglePassword()"
-            aria-label="Show password"
-            tabindex="0"
-          >
-            <!-- Eye icon (shown when password hidden) -->
+          <input class="field-input field-input--password" type="password" id="password"
+            name="password" placeholder="Enter your password" autocomplete="current-password" required aria-required="true"/>
+          <button type="button" class="password-toggle" id="pw-toggle" onclick="togglePassword('password','pw-toggle','eye-show','eye-hide')" aria-label="Show password">
             <svg id="eye-show" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
               <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
               <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
             </svg>
-            <!-- Eye-off icon (shown when password visible) -->
             <svg id="eye-hide" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" style="display:none">
               <path fill-rule="evenodd" d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074l-1.78-1.781zm4.261 4.26l1.514 1.515a2.003 2.003 0 012.45 2.45l1.514 1.514a4 4 0 00-5.478-5.478z" clip-rule="evenodd"/>
               <path d="M12.454 16.697L9.75 13.992a4 4 0 01-3.742-3.741L2.335 6.578A9.98 9.98 0 00.458 10c1.274 4.057 5.064 7 9.542 7 .847 0 1.669-.105 2.454-.303z"/>
@@ -549,7 +574,6 @@
         </div>
       </div>
 
-      <!-- Submit -->
       <button class="btn-submit" type="submit" id="login-btn" aria-live="polite">
         <span class="btn-submit__content">
           <svg width="15" height="15" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -557,12 +581,62 @@
           </svg>
           Sign In
         </span>
-        <span class="btn-submit__spinner" aria-hidden="true">
-          <div class="spinner-ring"></div>
-        </span>
+        <span class="btn-submit__spinner" aria-hidden="true"><div class="spinner-ring"></div></span>
       </button>
-
     </form>
+
+    <!-- REGISTER FORM -->
+    <form class="login-form" id="register-form" onsubmit="doRegister(event)" novalidate style="display:none">
+
+      <div class="field-group">
+        <label class="field-label" for="reg-username">Username</label>
+        <div class="input-wrap">
+          <span class="input-icon" aria-hidden="true">
+            <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/></svg>
+          </span>
+          <input class="field-input" type="text" id="reg-username" placeholder="Choose a username"
+            autocapitalize="none" spellcheck="false" required aria-required="true"/>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="reg-email">Email</label>
+        <div class="input-wrap">
+          <span class="input-icon" aria-hidden="true">
+            <svg viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/></svg>
+          </span>
+          <input class="field-input" type="email" id="reg-email" placeholder="Your email address"
+            autocomplete="email" required aria-required="true"/>
+        </div>
+      </div>
+
+      <div class="field-group field-group--last">
+        <label class="field-label" for="reg-password">Password</label>
+        <div class="input-wrap">
+          <span class="input-icon" aria-hidden="true">
+            <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg>
+          </span>
+          <input class="field-input field-input--password" type="password" id="reg-password"
+            placeholder="Min. 6 characters" autocomplete="new-password" required aria-required="true"/>
+          <button type="button" class="password-toggle" onclick="togglePassword('reg-password','reg-pw-toggle','reg-eye-show','reg-eye-hide')" id="reg-pw-toggle" aria-label="Show password">
+            <svg id="reg-eye-show" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+              <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
+            </svg>
+            <svg id="reg-eye-hide" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" style="display:none">
+              <path fill-rule="evenodd" d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074l-1.78-1.781zm4.261 4.26l1.514 1.515a2.003 2.003 0 012.45 2.45l1.514 1.514a4 4 0 00-5.478-5.478z" clip-rule="evenodd"/>
+              <path d="M12.454 16.697L9.75 13.992a4 4 0 01-3.742-3.741L2.335 6.578A9.98 9.98 0 00.458 10c1.274 4.057 5.064 7 9.542 7 .847 0 1.669-.105 2.454-.303z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <button class="btn-submit" type="submit" id="register-btn" aria-live="polite">
+        <span class="btn-submit__content">Create Account</span>
+        <span class="btn-submit__spinner" aria-hidden="true"><div class="spinner-ring"></div></span>
+      </button>
+    </form>
+
   </div>
 
   <!-- Footer -->
@@ -572,16 +646,30 @@
 </div>
 
 <script>
-// If already logged in, redirect to dashboard
 if (localStorage.getItem('persona_token')) {
   window.location.href = '/index.html';
 }
 
-function togglePassword() {
-  const input = document.getElementById('password');
-  const btn   = document.getElementById('pw-toggle');
-  const show  = document.getElementById('eye-show');
-  const hide  = document.getElementById('eye-hide');
+// ── Tab switching ──
+function switchTab(tab) {
+  const isLogin = tab === 'login';
+  document.getElementById('login-form').style.display    = isLogin ? '' : 'none';
+  document.getElementById('register-form').style.display = isLogin ? 'none' : '';
+  document.getElementById('tab-login').classList.toggle('active', isLogin);
+  document.getElementById('tab-register').classList.toggle('active', !isLogin);
+  document.getElementById('card-subtitle').textContent = isLogin ? 'Sign in to your workspace' : 'Create a new account';
+  hideError();
+  hideSuccess();
+  if (isLogin) document.getElementById('username').focus();
+  else document.getElementById('reg-username').focus();
+}
+
+// ── Password toggle ──
+function togglePassword(inputId, btnId, showId, hideId) {
+  const input = document.getElementById(inputId);
+  const show  = document.getElementById(showId);
+  const hide  = document.getElementById(hideId);
+  const btn   = document.getElementById(btnId);
   const isHidden = input.type === 'password';
   input.type = isHidden ? 'text' : 'password';
   show.style.display = isHidden ? 'none' : '';
@@ -589,43 +677,39 @@ function togglePassword() {
   btn.setAttribute('aria-label', isHidden ? 'Hide password' : 'Show password');
 }
 
-function setLoading(on) {
-  const btn = document.getElementById('login-btn');
-  btn.disabled = on;
-  btn.classList.toggle('loading', on);
-  btn.setAttribute('aria-busy', on ? 'true' : 'false');
-}
-
+// ── Alerts ──
 function showError(msg) {
-  const errEl   = document.getElementById('login-error');
-  const errText = document.getElementById('login-error-text');
-  const card    = document.getElementById('login-card');
-  errText.textContent = msg;
-  errEl.classList.add('visible');
-  // Shake the card
+  const el   = document.getElementById('login-error');
+  const card = document.getElementById('login-card');
+  document.getElementById('login-error-text').textContent = msg;
+  el.classList.add('visible');
   card.classList.remove('login-card--shake');
-  void card.offsetWidth; // reflow to restart animation
+  void card.offsetWidth;
   card.classList.add('login-card--shake');
   setTimeout(() => card.classList.remove('login-card--shake'), 500);
 }
+function hideError()   { document.getElementById('login-error').classList.remove('visible'); }
+function showSuccess(msg) {
+  document.getElementById('login-success-text').textContent = msg;
+  document.getElementById('login-success').classList.add('visible');
+}
+function hideSuccess() { document.getElementById('login-success').classList.remove('visible'); }
 
-function hideError() {
-  document.getElementById('login-error').classList.remove('visible');
+function setLoading(btnId, on) {
+  const btn = document.getElementById(btnId);
+  btn.disabled = on;
+  btn.classList.toggle('loading', on);
 }
 
+// ── Login ──
 async function doLogin(e) {
   e.preventDefault();
   const username = document.getElementById('username').value.trim();
   const password = document.getElementById('password').value;
-
-  hideError();
-
-  // Basic client-side validation
+  hideError(); hideSuccess();
   if (!username) { showError('Please enter your username.'); return; }
-  if (!password)  { showError('Please enter your password.'); return; }
-
-  setLoading(true);
-
+  if (!password) { showError('Please enter your password.'); return; }
+  setLoading('login-btn', true);
   try {
     const res = await fetch('/api/auth/login', {
       method: 'POST',
@@ -638,23 +722,51 @@ async function doLogin(e) {
     }
     const data = await res.json();
     localStorage.setItem('persona_token', data.token);
-
-    // Success — animate out then redirect
+    localStorage.setItem('persona_username', data.username);
     const card = document.getElementById('login-card');
     card.classList.add('login-card--success');
     setTimeout(() => { window.location.href = '/index.html'; }, 350);
   } catch (err) {
-    setLoading(false);
+    setLoading('login-btn', false);
     showError(err.message);
-    // Refocus the appropriate field
-    const usernameEl = document.getElementById('username');
-    const passwordEl = document.getElementById('password');
-    if (!usernameEl.value.trim()) {
-      usernameEl.focus();
+    if (!document.getElementById('username').value.trim()) {
+      document.getElementById('username').focus();
     } else {
-      passwordEl.focus();
-      passwordEl.select();
+      const p = document.getElementById('password');
+      p.focus(); p.select();
     }
+  }
+}
+
+// ── Register ──
+async function doRegister(e) {
+  e.preventDefault();
+  const username = document.getElementById('reg-username').value.trim();
+  const email    = document.getElementById('reg-email').value.trim();
+  const password = document.getElementById('reg-password').value;
+  hideError(); hideSuccess();
+  if (!username) { showError('Please enter a username.'); return; }
+  if (username.length < 3) { showError('Username must be at least 3 characters.'); return; }
+  if (!email)    { showError('Please enter your email.'); return; }
+  if (!password) { showError('Please enter a password.'); return; }
+  if (password.length < 6) { showError('Password must be at least 6 characters.'); return; }
+  setLoading('register-btn', true);
+  try {
+    const res = await fetch('/api/auth/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, email, password }),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.detail || 'Registration failed.');
+    }
+    document.getElementById('register-form').reset();
+    showSuccess('Account created! Your account is pending approval by the administrator. You will be able to log in once approved.');
+  } catch (err) {
+    showError(err.message);
+  } finally {
+    setLoading('register-btn', false);
   }
 }
 </script>

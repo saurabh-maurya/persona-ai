@@ -30,8 +30,6 @@ class Settings(BaseSettings):
     cors_origins: list[str] = ["http://localhost:8000"]
 
     # Auth
-    admin_username: str = "admin"
-    admin_password: str = "admin123"
     jwt_secret: str = "change-me-in-production"
     jwt_expiry_hours: int = 24
 

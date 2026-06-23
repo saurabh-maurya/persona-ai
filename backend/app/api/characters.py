@@ -24,33 +24,32 @@ async def list_characters(request: Request, current_user: str = Depends(require_
 
 
 @router.get("/{id}")
-async def get_character(id: str, request: Request):
-    character = await _service(request).get_by_id(id)
+async def get_character(id: str, request: Request, current_user: str = Depends(require_auth)):
+    character = await _service(request).get_by_id_for_user(id, current_user)
     if not character:
         raise HTTPException(404, "Character not found")
     return character
 
 
 @router.put("/{id}")
-async def update_character(id: str, body: CharacterUpdate, request: Request):
-    character = await _service(request).update(id, body)
+async def update_character(id: str, body: CharacterUpdate, request: Request, current_user: str = Depends(require_auth)):
+    character = await _service(request).update(id, body, user_id=current_user)
     if not character:
         raise HTTPException(404, "Character not found")
     return character
 
 
 @router.get("/{id}/suggest-sequel")
-async def suggest_sequel_context(id: str, request: Request):
-    """Return a pre-filled contentSummary hint based on the character's most recent completed batch."""
+async def suggest_sequel_context(id: str, request: Request, current_user: str = Depends(require_auth)):
     batch_repo = BatchRepository(request.app.state.db)
     section_repo = DaySectionRepository(request.app.state.db)
 
-    all_batches = await batch_repo.find_by_character(id)
+    all_batches = await batch_repo.find_by_character(id, user_id=current_user)
     completed = [b for b in all_batches if b.get("status") == "COMPLETED"]
     if not completed:
         return {"suggestion": "", "lastBatchName": "", "lastBatchId": ""}
 
-    last = completed[0]  # find_by_character sorts by createdAt desc
+    last = completed[0]
     sections = await section_repo.find_by_batch(last["_id"])
 
     if not sections:
@@ -77,29 +76,29 @@ async def suggest_sequel_context(id: str, request: Request):
 
 
 @router.get("/{id}/batch-count")
-async def get_character_batch_count(id: str, request: Request):
-    """Return how many batches exist for this character (used by delete confirmation UI)."""
-    batches = await BatchRepository(request.app.state.db).find_by_character(id)
+async def get_character_batch_count(id: str, request: Request, current_user: str = Depends(require_auth)):
+    batches = await BatchRepository(request.app.state.db).find_by_character(id, user_id=current_user)
     return {"characterId": id, "batchCount": len(batches)}
 
 
 @router.delete("/{id}", status_code=204)
-async def delete_character(id: str, request: Request):
-    # Cascade: delete all batches and their day sections first
+async def delete_character(id: str, request: Request, current_user: str = Depends(require_auth)):
+    # Verify ownership first
+    character = await _service(request).get_by_id_for_user(id, current_user)
+    if not character:
+        raise HTTPException(404, "Character not found")
+
     batch_repo = BatchRepository(request.app.state.db)
     section_repo = DaySectionRepository(request.app.state.db)
-    batches = await batch_repo.find_by_character(id)
+    batches = await batch_repo.find_by_character(id, user_id=current_user)
     for batch in batches:
         await section_repo.delete_by_batch(batch["_id"])
-    await request.app.state.db.batches.delete_many({"characterId": id})
-    deleted = await _service(request).delete(id)
-    if not deleted:
-        raise HTTPException(404, "Character not found")
+    await request.app.state.db.batches.delete_many({"characterId": id, "userId": current_user})
+    await _service(request).delete(id)
 
 
 @router.post("/generate-ai")
-async def ai_generate_character(body: CharacterAIGenerate):
-    """Use Gemini to generate a full character profile from minimal input. Does not save to DB."""
+async def ai_generate_character(body: CharacterAIGenerate, current_user: str = Depends(require_auth)):
     try:
         result = await generate_character_with_ai(
             name=body.name, niche=body.niche, vibe=body.vibe, location=body.location
