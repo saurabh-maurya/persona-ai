@@ -153,6 +153,11 @@ VENV_PIP="$VENV_DIR/bin/pip"
 step "Installing Python dependencies"
 
 "$VENV_PIP" install --upgrade pip --quiet
+
+# Pre-install latest greenlet so C-extension compilation uses a version that
+# supports the active Python (greenlet 3.1.1+ covers 3.12/3.13/3.14).
+"$VENV_PIP" install --upgrade "greenlet>=3.1.1" --quiet
+
 "$VENV_PIP" install -r "$BACKEND_DIR/requirements.txt"
 success "Python dependencies installed"
 
