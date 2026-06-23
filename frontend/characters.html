@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Characters — Persona AI Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css?v=3" />
+</head>
+<body>
+<div class="app-shell">
+
+  <aside class="sidebar" aria-label="Main navigation">
+    <div class="sidebar__logo">
+      <div class="sidebar__logo-icon">✦</div>
+      <div class="sidebar__logo-text">Persona AI<span>Studio v2.0</span></div>
+    </div>
+    <nav class="sidebar__nav">
+      <div class="nav-group__label">Main</div>
+      <a href="index.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/></svg>
+        Dashboard
+      </a>
+      <div class="nav-group__label">Content</div>
+      <a href="characters.html" class="nav-item active">
+        <svg class="nav-item__icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/></svg>
+        Characters
+      </a>
+      <a href="batches.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 20 20" fill="currentColor"><path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"/></svg>
+        Batches
+      </a>
+      <a href="calendar.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/></svg>
+        Calendar
+      </a>
+      <div class="nav-group__label">System</div>
+      <a href="settings.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/></svg>
+        Settings
+      </a>
+    </nav>
+        <div class="sidebar__footer">
+      <button class="sidebar__signout" onclick="auth.logout()">
+        <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M3 3a1 1 0 011 1v12a1 1 0 11-2 0V4a1 1 0 011-1zm7.707 3.293a1 1 0 010 1.414L9.414 9H17a1 1 0 110 2H9.414l1.293 1.293a1 1 0 01-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+        Sign Out
+      </button>
+      <div class="sidebar__version">Persona AI Studio v2.0</div>
+    </div>
+  </aside>
+
+  <div class="main-content">
+    <header class="topbar">
+      <div class="topbar__left"><h1 class="topbar__title">Characters</h1></div>
+      <div class="topbar__actions">
+        <button class="btn btn--primary btn--sm" onclick="openCreate()">
+          <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/></svg>
+          New Character
+        </button>
+      </div>
+    </header>
+
+    <main class="page">
+      <div class="page__header">
+        <div>
+          <p class="page__desc">Manage your AI influencer personas. Create manually or let AI generate the full profile.</p>
+        </div>
+      </div>
+      <div id="characters-grid" class="characters-grid">
+        <div class="character-card skeleton" style="height:200px"></div>
+        <div class="character-card skeleton" style="height:200px"></div>
+        <div class="character-card skeleton" style="height:200px"></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- Character Modal -->
+<div class="modal-overlay" id="char-modal" role="dialog" aria-modal="true">
+  <div class="modal modal--wide">
+    <div class="modal__header">
+      <h2 class="modal__title" id="modal-title">New Character</h2>
+      <button class="modal__close btn btn--icon btn--ghost" aria-label="Close">✕</button>
+    </div>
+
+    <!-- Mode tabs -->
+    <div class="modal-tabs" id="modal-tabs">
+      <button class="modal-tab active" id="tab-ai" onclick="switchTab('ai')">✦ Generate with AI</button>
+      <button class="modal-tab" id="tab-manual" onclick="switchTab('manual')">Manual</button>
+    </div>
+
+    <!-- AI Generation pane -->
+    <div id="pane-ai" class="modal__body">
+      <p style="font-size:var(--text-sm);color:var(--color-text-muted);margin-bottom:var(--space-2)">Enter a few details and AI will generate a complete character profile for review.</p>
+      <div class="form-grid">
+        <div class="field">
+          <label class="field__label" for="ai-name">Name <span class="field__required">*</span></label>
+          <input class="field__input" type="text" id="ai-name" placeholder="e.g. Riva Mehra" />
+        </div>
+        <div class="field">
+          <label class="field__label" for="ai-location">Location <span class="field__required">*</span></label>
+          <input class="field__input" type="text" id="ai-location" placeholder="e.g. Mumbai, India" />
+        </div>
+        <div class="field span-2">
+          <label class="field__label" for="ai-niche">Niche <span class="field__required">*</span></label>
+          <input class="field__input" type="text" id="ai-niche" placeholder="e.g. Luxury lifestyle, fashion, travel" />
+        </div>
+        <div class="field span-2">
+          <label class="field__label" for="ai-vibe">Vibe / Keywords <span class="field__required">*</span></label>
+          <input class="field__input" type="text" id="ai-vibe" placeholder="e.g. confident, mysterious, soft-glam, aspirational" />
+        </div>
+      </div>
+      <div id="ai-error" style="display:none;color:var(--color-error);font-size:var(--text-sm);margin-top:var(--space-3)"></div>
+    </div>
+
+    <!-- Manual pane -->
+    <div id="pane-manual" class="modal__body" style="display:none">
+      <form id="char-form" novalidate>
+        <input type="hidden" id="char-id" />
+        <div class="form-grid">
+          <div class="field">
+            <label class="field__label" for="char-name">Name <span class="field__required">*</span></label>
+            <input class="field__input" type="text" id="char-name" placeholder="e.g. Riva Mehra" required />
+          </div>
+          <div class="field">
+            <label class="field__label" for="char-age">Age</label>
+            <input class="field__input" type="text" id="char-age" placeholder="e.g. 24 years old" />
+          </div>
+          <div class="field">
+            <label class="field__label" for="char-gender">Gender / Presentation</label>
+            <input class="field__input" type="text" id="char-gender" placeholder="e.g. Female, soft-glam" />
+          </div>
+          <div class="field">
+            <label class="field__label" for="char-niche">Niche</label>
+            <input class="field__input" type="text" id="char-niche" placeholder="e.g. Luxury lifestyle, fashion" />
+          </div>
+          <div class="field">
+            <label class="field__label" for="char-city">City</label>
+            <input class="field__input" type="text" id="char-city" placeholder="e.g. Mumbai" />
+          </div>
+          <div class="field">
+            <label class="field__label" for="char-country">Country</label>
+            <input class="field__input" type="text" id="char-country" placeholder="e.g. India" />
+          </div>
+          <div class="field span-2">
+            <label class="field__label" for="char-persona">Personality</label>
+            <input class="field__input" type="text" id="char-persona" placeholder="e.g. Confident, playful, mysterious" />
+          </div>
+          <div class="field span-2">
+            <label class="field__label" for="char-appearance">Appearance</label>
+            <textarea class="field__textarea" id="char-appearance" rows="3" placeholder="Detailed physical appearance: face, skin, hair, eyes, body type..."></textarea>
+          </div>
+          <div class="field span-2">
+            <label class="field__label" for="char-fashion">Fashion Style</label>
+            <textarea class="field__textarea" id="char-fashion" rows="2" placeholder="Signature wardrobe, colors, accessories..."></textarea>
+          </div>
+          <div class="field span-2">
+            <label class="field__label" for="char-audience">Audience</label>
+            <input class="field__input" type="text" id="char-audience" placeholder="e.g. Men aged 21-38 who enjoy lifestyle content" />
+          </div>
+          <div class="field span-2">
+            <label class="field__label" for="char-masterprompt">Custom Master Prompt <span style="font-weight:400;color:var(--color-text-muted)">(optional)</span></label>
+            <textarea class="field__textarea" id="char-masterprompt" rows="3" placeholder="Override the default image description prompt for this character..."></textarea>
+          </div>
+          <div class="field">
+            <label class="field__label" for="char-status">Status</label>
+            <select class="field__select" id="char-status">
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+            </select>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="modal__footer" id="modal-footer">
+      <button class="btn btn--ghost" onclick="closeModal('char-modal')">Cancel</button>
+      <button class="btn btn--primary" id="primary-btn" onclick="primaryAction()">Generate Profile</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container"></div>
+<script src="js/common.js?v=2"></script><script>auth.guard();</script>
+<script>
+let characters = [];
+let currentTab = 'ai';
+let isEditMode = false;
+
+async function loadCharacters() {
+  try {
+    characters = await api.get('/characters');
+    renderCharacters(characters);
+  } catch (e) {
+    toast.error('Failed to load characters', e.message);
+  }
+}
+
+function renderCharacters(list) {
+  const grid = document.getElementById('characters-grid');
+  if (!list.length) {
+    grid.innerHTML = `
+      <div style="grid-column:1/-1" class="empty-state">
+        <div class="empty-state__icon">
+          <svg width="24" height="24" viewBox="0 0 20 20" fill="currentColor" style="color:var(--color-text-dim)"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/></svg>
+        </div>
+        <div class="empty-state__title">No characters yet</div>
+        <p class="empty-state__desc">Create your first AI influencer persona to start generating content.</p>
+        <button class="btn btn--primary" style="margin-top:var(--space-4)" onclick="openCreate()">
+          <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/></svg>
+          Create Character
+        </button>
+      </div>`;
+    return;
+  }
+  grid.innerHTML = list.map(c => {
+    const initials = c.name.split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
+    const meta = [c.age, c.city, c.country].filter(Boolean).join(' · ');
+    return `
+    <article class="character-card">
+      <div class="character-card__header">
+        <div style="display:flex;align-items:center;gap:var(--space-3);min-width:0">
+          <div class="character-card__avatar">${initials}</div>
+          <div style="min-width:0">
+            <div class="character-card__name">${c.name}</div>
+            <div class="character-card__meta">${meta}</div>
+          </div>
+        </div>
+        ${statusBadge(c.status)}
+      </div>
+      <div class="character-card__tags">
+        ${c.niche ? `<span class="tag">${c.niche.split(',')[0].trim()}</span>` : ''}
+        ${c.gender ? `<span class="tag">${c.gender.split(',')[0].trim()}</span>` : ''}
+        ${c.city ? `<span class="tag">${c.city}</span>` : ''}
+      </div>
+      ${c.persona ? `<p style="font-size:var(--text-xs);color:var(--color-text-muted);line-height:1.55;flex:1">${c.persona.slice(0,110)}${c.persona.length > 110 ? '…' : ''}</p>` : ''}
+      <div class="character-card__actions">
+        <a href="character.html?id=${c._id}" class="btn btn--sm btn--secondary" style="flex:1;justify-content:center">View Profile</a>
+        <button class="btn btn--sm btn--ghost btn--icon" onclick="editCharacter('${c._id}')" title="Edit">
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/></svg>
+        </button>
+        <button class="btn btn--sm btn--danger btn--icon" onclick="deleteCharacter('${c._id}', '${c.name.replace(/'/g,"\\'")}')">
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+        </button>
+      </div>
+    </article>`;
+  }).join('');
+}
+
+function openCreate() {
+  isEditMode = false;
+  resetForm();
+  document.getElementById('modal-title').textContent = 'New Character';
+  document.getElementById('modal-tabs').style.display = '';
+  switchTab('ai');
+  openModal('char-modal');
+}
+
+function editCharacter(id) {
+  const c = characters.find(x => x._id === id);
+  if (!c) return;
+  isEditMode = true;
+  resetForm();
+  document.getElementById('modal-title').textContent = 'Edit Character';
+  document.getElementById('modal-tabs').style.display = 'none';
+  switchTab('manual');
+
+  document.getElementById('char-id').value = c._id;
+  document.getElementById('char-name').value = c.name || '';
+  document.getElementById('char-age').value = c.age || '';
+  document.getElementById('char-gender').value = c.gender || '';
+  document.getElementById('char-persona').value = c.persona || '';
+  document.getElementById('char-appearance').value = c.appearance || '';
+  document.getElementById('char-fashion').value = c.fashionStyle || '';
+  document.getElementById('char-audience').value = c.audience || '';
+  document.getElementById('char-niche').value = c.niche || '';
+  document.getElementById('char-city').value = c.city || '';
+  document.getElementById('char-country').value = c.country || '';
+  document.getElementById('char-masterprompt').value = c.masterPrompt || '';
+  document.getElementById('char-status').value = c.status || 'active';
+
+  document.getElementById('primary-btn').textContent = 'Update Character';
+  openModal('char-modal');
+}
+
+function switchTab(tab) {
+  currentTab = tab;
+  document.getElementById('pane-ai').style.display = tab === 'ai' ? '' : 'none';
+  document.getElementById('pane-manual').style.display = tab === 'manual' ? '' : 'none';
+  document.getElementById('tab-ai').classList.toggle('active', tab === 'ai');
+  document.getElementById('tab-manual').classList.toggle('active', tab === 'manual');
+
+  const btn = document.getElementById('primary-btn');
+  if (tab === 'ai') {
+    btn.textContent = 'Generate Profile';
+  } else {
+    btn.textContent = isEditMode ? 'Update Character' : 'Create Character';
+  }
+}
+
+async function primaryAction() {
+  if (currentTab === 'ai') {
+    await generateWithAI();
+  } else {
+    await saveCharacter();
+  }
+}
+
+async function generateWithAI() {
+  const name     = document.getElementById('ai-name').value.trim();
+  const niche    = document.getElementById('ai-niche').value.trim();
+  const vibe     = document.getElementById('ai-vibe').value.trim();
+  const location = document.getElementById('ai-location').value.trim();
+
+  const errEl = document.getElementById('ai-error');
+  errEl.style.display = 'none';
+
+  if (!name || !niche || !vibe || !location) {
+    errEl.textContent = 'All fields are required.';
+    errEl.style.display = '';
+    return;
+  }
+
+  const btn = document.getElementById('primary-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner spinner--sm"></span>&nbsp;Generating…';
+
+  try {
+    const profile = await api.post('/characters/generate-ai', { name, niche, vibe, location });
+    // Pre-fill manual form
+    document.getElementById('char-name').value       = profile.name || name;
+    document.getElementById('char-age').value        = profile.age || '';
+    document.getElementById('char-gender').value     = profile.gender || '';
+    document.getElementById('char-persona').value    = profile.persona || '';
+    document.getElementById('char-appearance').value = profile.appearance || '';
+    document.getElementById('char-fashion').value    = profile.fashionStyle || '';
+    document.getElementById('char-audience').value   = profile.audience || '';
+    document.getElementById('char-niche').value      = profile.niche || niche;
+    document.getElementById('char-city').value       = profile.city || '';
+    document.getElementById('char-country').value    = profile.country || '';
+    document.getElementById('char-status').value     = 'active';
+
+    toast.success('Profile generated', 'Review and adjust, then save.');
+    document.getElementById('modal-tabs').style.display = '';
+    switchTab('manual');
+  } catch (e) {
+    errEl.textContent = `Generation failed: ${e.message}`;
+    errEl.style.display = '';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Generate Profile';
+  }
+}
+
+async function saveCharacter() {
+  const id   = document.getElementById('char-id').value;
+  const name = document.getElementById('char-name').value.trim();
+  if (!name) { toast.error('Name is required'); return; }
+
+  const body = {
+    name,
+    age:          document.getElementById('char-age').value.trim(),
+    gender:       document.getElementById('char-gender').value.trim(),
+    persona:      document.getElementById('char-persona').value.trim(),
+    appearance:   document.getElementById('char-appearance').value.trim(),
+    fashionStyle: document.getElementById('char-fashion').value.trim(),
+    audience:     document.getElementById('char-audience').value.trim(),
+    niche:        document.getElementById('char-niche').value.trim(),
+    city:         document.getElementById('char-city').value.trim(),
+    country:      document.getElementById('char-country').value.trim(),
+    masterPrompt: document.getElementById('char-masterprompt').value.trim(),
+    status:       document.getElementById('char-status').value,
+  };
+
+  const btn = document.getElementById('primary-btn');
+  btn.disabled = true;
+  btn.textContent = 'Saving…';
+
+  try {
+    if (id) {
+      await api.put(`/characters/${id}`, body);
+      toast.success('Character updated');
+    } else {
+      await api.post('/characters', body);
+      toast.success('Character created');
+    }
+    closeModal('char-modal');
+    resetForm();
+    await loadCharacters();
+  } catch (e) {
+    toast.error('Save failed', e.message);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = id ? 'Update Character' : 'Create Character';
+  }
+}
+
+async function deleteCharacter(id, name) {
+  let batchInfo = '';
+  try {
+    const { batchCount } = await api.get(`/characters/${id}/batch-count`);
+    if (batchCount > 0) {
+      batchInfo = ` This will also permanently delete ${batchCount} batch${batchCount !== 1 ? 'es' : ''} and all their generated content.`;
+    }
+  } catch (_) {}
+  confirmAction(`Delete "${name}"?${batchInfo} This cannot be undone.`, async () => {
+    try {
+      await api.delete(`/characters/${id}`);
+      toast.success('Character deleted');
+      await loadCharacters();
+    } catch (e) {
+      toast.error('Delete failed', e.message);
+    }
+  });
+}
+
+function resetForm() {
+  ['char-id','char-name','char-age','char-gender','char-persona','char-appearance',
+   'char-fashion','char-audience','char-niche','char-city','char-country','char-masterprompt',
+   'ai-name','ai-niche','ai-vibe','ai-location'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  document.getElementById('char-status').value = 'active';
+  document.getElementById('ai-error').style.display = 'none';
+  document.getElementById('primary-btn').textContent = 'Generate Profile';
+}
+
+loadCharacters();
+</script>
+</body>
+</html>

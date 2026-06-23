@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Batches — Persona AI Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css?v=3" />
+</head>
+<body>
+<div class="app-shell">
+
+  <aside class="sidebar" aria-label="Main navigation">
+    <div class="sidebar__logo">
+      <div class="sidebar__logo-icon">✦</div>
+      <div class="sidebar__logo-text">Persona AI<span>Studio v2.0</span></div>
+    </div>
+    <nav class="sidebar__nav">
+      <div class="nav-group__label">Main</div>
+      <a href="index.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/></svg>
+        Dashboard
+      </a>
+      <div class="nav-group__label">Content</div>
+      <a href="characters.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/></svg>
+        Characters
+      </a>
+      <a href="batches.html" class="nav-item active">
+        <svg class="nav-item__icon" viewBox="0 0 20 20" fill="currentColor"><path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"/></svg>
+        Batches
+      </a>
+      <a href="calendar.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/></svg>
+        Calendar
+      </a>
+      <div class="nav-group__label">System</div>
+      <a href="settings.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/></svg>
+        Settings
+      </a>
+    </nav>
+        <div class="sidebar__footer">
+      <button class="sidebar__signout" onclick="auth.logout()">
+        <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M3 3a1 1 0 011 1v12a1 1 0 11-2 0V4a1 1 0 011-1zm7.707 3.293a1 1 0 010 1.414L9.414 9H17a1 1 0 110 2H9.414l1.293 1.293a1 1 0 01-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+        Sign Out
+      </button>
+      <div class="sidebar__version">Persona AI Studio v2.0</div>
+    </div>
+  </aside>
+
+  <div class="main-content">
+    <header class="topbar">
+      <div class="topbar__left"><h1 class="topbar__title">Batches</h1></div>
+      <div class="topbar__actions">
+        <button class="btn btn--primary btn--sm" onclick="openCreateModal()">
+          <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/></svg>
+          New Batch
+        </button>
+      </div>
+    </header>
+
+    <main class="page">
+      <div class="page__header">
+        <div>
+          <p class="page__desc">Multi-day content batches — generate outfit descriptions and image prompts per day &amp; section.</p>
+        </div>
+        <div style="display:flex;gap:var(--space-3);align-items:center">
+          <input class="field__input" type="search" id="filter-search" placeholder="Search batches…" style="width:180px" oninput="renderBatches(applyFilters())" />
+          <select class="field__select" id="filter-character" style="width:200px" onchange="loadBatches()">
+            <option value="">All Characters</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="batches-list">
+        <div class="skeleton" style="height:72px;border-radius:var(--radius-lg);margin-bottom:var(--space-3)"></div>
+        <div class="skeleton" style="height:72px;border-radius:var(--radius-lg);margin-bottom:var(--space-3)"></div>
+        <div class="skeleton" style="height:72px;border-radius:var(--radius-lg)"></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- Create Batch Modal -->
+<div class="modal-overlay" id="create-modal" role="dialog" aria-modal="true">
+  <div class="modal modal--wide">
+    <div class="modal__header">
+      <h2 class="modal__title" id="modal-title">New Batch</h2>
+      <button class="modal__close btn btn--icon btn--ghost" aria-label="Close">✕</button>
+    </div>
+    <div class="modal__body">
+      <div class="form-grid">
+        <div class="field span-2">
+          <label class="field__label" for="batch-name">Batch Name <span class="field__required">*</span></label>
+          <input class="field__input" type="text" id="batch-name" placeholder="e.g. June Week 1 — Mumbai Vibes" />
+        </div>
+        <div class="field">
+          <label class="field__label" for="batch-character">Character <span class="field__required">*</span></label>
+          <select class="field__select" id="batch-character" onchange="onCharacterChange()"></select>
+        </div>
+        <div class="field" style="display:flex;align-items:flex-end">
+          <div id="sequel-hint" style="display:none;width:100%" class="sequel-hint">
+            <span style="font-size:var(--text-xs);color:var(--color-text-muted)">Sequel suggestion:</span>
+            <span id="sequel-hint-text" style="font-size:var(--text-xs);color:var(--color-text);font-style:italic"></span>
+            <div style="display:flex;gap:var(--space-2);margin-top:var(--space-2)">
+              <button class="btn btn--xs btn--secondary" onclick="applySequelHint()">Use as context</button>
+              <button class="btn btn--xs btn--ghost" onclick="document.getElementById('sequel-hint').style.display='none'">Dismiss</button>
+            </div>
+          </div>
+        </div>
+        <div class="field span-2">
+          <label class="field__label" style="margin-bottom:var(--space-2)">Quick Date Range</label>
+          <div style="display:flex;gap:var(--space-2);align-items:center;flex-wrap:wrap">
+            <button type="button" class="btn btn--sm btn--secondary" onclick="applyQuickDateRange(1)">1 Day</button>
+            <button type="button" class="btn btn--sm btn--secondary" onclick="applyQuickDateRange(7)">7 Days</button>
+            <span id="quick-date-hint" style="font-size:var(--text-xs);color:var(--color-text-muted)"></span>
+          </div>
+        </div>
+        <div class="field">
+          <label class="field__label" for="batch-start">Start Date <span class="field__required">*</span></label>
+          <input class="field__input" type="date" id="batch-start" />
+        </div>
+        <div class="field">
+          <label class="field__label" for="batch-end">End Date <span class="field__required">*</span></label>
+          <input class="field__input" type="date" id="batch-end" />
+        </div>
+        <div class="field span-2">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-2)">
+            <label class="field__label" style="margin-bottom:0">Sections per Day <span class="field__required">*</span></label>
+            <div style="display:flex;gap:var(--space-2);align-items:center">
+              <select class="field__select" id="template-select" style="font-size:var(--text-xs);padding:2px 6px;height:auto" onchange="loadTemplate()">
+                <option value="">Load template…</option>
+              </select>
+              <button class="btn btn--xs btn--ghost" onclick="saveTemplate()" title="Save current sections as template">Save</button>
+            </div>
+          </div>
+          <div id="sections-builder" style="display:flex;flex-direction:column;gap:var(--space-3)">
+            <!-- section rows added here -->
+          </div>
+          <button class="btn btn--ghost btn--sm" onclick="addSection()" style="align-self:flex-start;margin-top:var(--space-2)">+ Add Section</button>
+        </div>
+        <div class="field span-2">
+          <label class="field__label" for="batch-summary">Batch Theme / Sequel Context <span style="font-weight:400;color:var(--color-text-muted)">(optional)</span></label>
+          <textarea class="field__textarea" id="batch-summary" rows="2" placeholder="e.g. Sequel to last week's Goa trip — Riva is back in Mumbai, first week home, city vibe..."></textarea>
+          <span class="field__hint">This helps the AI avoid repeating outfits, locations and themes from previous batches.</span>
+        </div>
+      </div>
+    </div>
+    <div class="modal__footer">
+      <button class="btn btn--ghost" onclick="closeModal('create-modal')">Cancel</button>
+      <button class="btn btn--primary" id="save-batch-btn" onclick="saveBatch()">Create Batch</button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Batch Modal -->
+<div class="modal-overlay" id="edit-modal" role="dialog" aria-modal="true">
+  <div class="modal">
+    <div class="modal__header">
+      <h2 class="modal__title">Edit Batch</h2>
+      <button class="modal__close btn btn--icon btn--ghost" aria-label="Close" onclick="closeModal('edit-modal')">✕</button>
+    </div>
+    <div class="modal__body">
+      <div class="form-grid">
+        <div class="field span-2">
+          <label class="field__label" for="edit-name">Batch Name <span class="field__required">*</span></label>
+          <input class="field__input" type="text" id="edit-name" />
+        </div>
+        <div class="field">
+          <label class="field__label" for="edit-start">Start Date <span class="field__required">*</span></label>
+          <input class="field__input" type="date" id="edit-start" />
+        </div>
+        <div class="field">
+          <label class="field__label" for="edit-end">End Date <span class="field__required">*</span></label>
+          <input class="field__input" type="date" id="edit-end" />
+        </div>
+        <div class="field span-2">
+          <label class="field__label" for="edit-summary">Batch Theme / Sequel Context</label>
+          <textarea class="field__textarea" id="edit-summary" rows="2"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal__footer">
+      <button class="btn btn--ghost" onclick="closeModal('edit-modal')">Cancel</button>
+      <button class="btn btn--primary" id="save-edit-btn" onclick="saveEdit()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container"></div>
+<script src="js/common.js?v=2"></script><script>auth.guard();</script>
+<script>
+let characters = [];
+let batches = [];
+let refreshTimer = null;
+
+const SECTION_PRESETS = ['Morning', 'Afternoon', 'Evening', 'Night'];
+
+async function init() {
+  // Pre-fill character filter from URL param (e.g. from characters.html "Batches" link)
+  const urlChar = new URLSearchParams(location.search).get('character');
+  await loadCharacters();
+  if (urlChar) {
+    const sel = document.getElementById('filter-character');
+    if (sel) sel.value = urlChar;
+  }
+  await loadBatches();
+  scheduleRefresh();
+}
+
+function scheduleRefresh() {
+  clearInterval(refreshTimer);
+  // Only auto-refresh while at least one batch is generating
+  const hasGenerating = batches.some(b => b.status === 'GENERATING');
+  if (hasGenerating) {
+    refreshTimer = setInterval(async () => {
+      await loadBatches();
+      if (!batches.some(b => b.status === 'GENERATING')) {
+        clearInterval(refreshTimer);
+      }
+    }, 8000);
+  }
+}
+
+async function loadCharacters() {
+  try {
+    characters = await api.get('/characters');
+    const filterSel = document.getElementById('filter-character');
+    const batchSel = document.getElementById('batch-character');
+    filterSel.innerHTML = '<option value="">All Characters</option>' +
+      characters.map(c => `<option value="${c._id}">${c.name}</option>`).join('');
+    batchSel.innerHTML = '<option value="">Select character…</option>' +
+      characters.filter(c => c.status === 'active').map(c => `<option value="${c._id}">${c.name}</option>`).join('');
+  } catch (e) {
+    toast.error('Failed to load characters', e.message);
+  }
+}
+
+async function loadBatches() {
+  const charFilter = document.getElementById('filter-character').value;
+  const url = charFilter ? `/batches?character_id=${charFilter}` : '/batches';
+  try {
+    batches = await api.get(url);
+    renderBatches(applyFilters());
+    scheduleRefresh();
+  } catch (e) {
+    toast.error('Failed to load batches', e.message);
+  }
+}
+
+function applyFilters() {
+  const q = (document.getElementById('filter-search')?.value || '').toLowerCase().trim();
+  if (!q) return batches;
+  return batches.filter(b =>
+    b.batchName.toLowerCase().includes(q) ||
+    (b.characterName || '').toLowerCase().includes(q) ||
+    (b.startDate || '').includes(q) ||
+    (b.endDate || '').includes(q)
+  );
+}
+
+function renderBatches(list) {
+  const container = document.getElementById('batches-list');
+  if (!list.length) {
+    container.innerHTML = `
+      <div class="empty-state" style="background:var(--color-surface);border:var(--border);border-radius:var(--radius-2xl);padding:var(--space-12)">
+        <div class="empty-state__icon">
+          <svg width="24" height="24" viewBox="0 0 20 20" fill="currentColor" style="color:var(--color-text-dim)"><path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"/></svg>
+        </div>
+        <div class="empty-state__title">No batches yet</div>
+        <p class="empty-state__desc">Create a content batch to start generating image descriptions for your characters.</p>
+        <button class="btn btn--primary" style="margin-top:var(--space-4)" onclick="openCreateModal()">
+          <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/></svg>
+          Create Batch
+        </button>
+      </div>`;
+    return;
+  }
+  container.innerHTML = `<div class="batch-list">` + list.map(b => {
+    const statusClass = b.status.toLowerCase();
+    const days = b.totalDays || 0;
+    const imgs = b.totalImages || 0;
+    const sections = (b.sections || []).map(s => s.name).join(' · ');
+    const canGenerate = ['CREATED', 'FAILED', 'PARTIAL'].includes(b.status);
+    const isGenerating = b.status === 'GENERATING';
+    const done = b.generatedSections || 0;
+    const total = b.totalSections || 0;
+    const progressHtml = isGenerating && total > 0
+      ? `<span class="sep">·</span><span style="color:var(--color-warning);font-weight:500">${done}/${total} sections</span>`
+      : '';
+    return `
+    <div class="batch-row" onclick="window.location='batch-detail.html?id=${b._id}'" role="link" tabindex="0">
+      <div class="batch-row__info">
+        <div class="batch-row__name">${b.batchName}</div>
+        <div class="batch-row__meta">
+          <span style="color:var(--color-text-secondary);font-weight:500">${b.characterName}</span>
+          <span class="sep">·</span>
+          <span>${b.startDate} → ${b.endDate}</span>
+          <span class="sep">·</span>
+          <span>${days} day${days !== 1 ? 's' : ''}</span>
+          <span class="sep">·</span>
+          <span>${fmtNum(imgs)} images</span>
+          ${sections ? `<span class="sep">·</span><span style="color:var(--color-text-dim)">${sections}</span>` : ''}
+          ${progressHtml}
+        </div>
+      </div>
+      <div class="batch-row__actions" onclick="event.stopPropagation()">
+        <span class="badge badge--${statusClass}">${b.status}</span>
+        ${canGenerate ? `<button class="btn btn--sm btn--primary" onclick="quickGenerate('${b._id}', event)">Generate</button>` : ''}
+        <a href="batch-detail.html?id=${b._id}" class="btn btn--sm btn--secondary">View</a>
+        ${!isGenerating ? `<button class="btn btn--sm btn--ghost btn--icon" onclick="openEditModal('${b._id}', event)" title="Edit">
+          <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/></svg>
+        </button>` : ''}
+        <button class="btn btn--sm btn--ghost btn--icon" onclick="duplicateBatch('${b._id}', event)" title="Duplicate">
+          <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path d="M7 9a2 2 0 012-2h6a2 2 0 012 2v6a2 2 0 01-2 2H9a2 2 0 01-2-2V9z"/><path d="M5 3a2 2 0 00-2 2v6a2 2 0 002 2V5h8a2 2 0 00-2-2H5z"/></svg>
+        </button>
+        <button class="btn btn--sm btn--danger btn--icon" onclick="deleteBatch('${b._id}', '${b.batchName.replace(/'/g,"\\'")}')">
+          <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+        </button>
+      </div>
+    </div>`;
+  }).join('') + `</div>`;
+}
+
+// --- Template localStorage ---
+const TEMPLATE_KEY = 'persona_section_templates';
+
+function getTemplates() {
+  try { return JSON.parse(localStorage.getItem(TEMPLATE_KEY) || '[]'); } catch { return []; }
+}
+
+function saveTemplates(list) {
+  localStorage.setItem(TEMPLATE_KEY, JSON.stringify(list));
+}
+
+function refreshTemplateDropdown() {
+  const sel = document.getElementById('template-select');
+  const tpls = getTemplates();
+  sel.innerHTML = '<option value="">Load template…</option>' +
+    tpls.map((t, i) => `<option value="${i}">${t.name}</option>`).join('');
+}
+
+function loadTemplate() {
+  const sel = document.getElementById('template-select');
+  const idx = parseInt(sel.value, 10);
+  if (isNaN(idx)) return;
+  const tpls = getTemplates();
+  const tpl = tpls[idx];
+  if (!tpl) return;
+  document.getElementById('sections-builder').innerHTML = '';
+  tpl.sections.forEach(s => addSection(s.name, s.imageCount));
+  sel.value = '';
+}
+
+function saveTemplate() {
+  const rows = document.querySelectorAll('#sections-builder > div');
+  const sections = [];
+  for (const row of rows) {
+    const [nameInput, countInput] = row.querySelectorAll('input');
+    const sName = nameInput.value.trim();
+    const sCount = parseInt(countInput.value, 10);
+    if (sName && sCount > 0) sections.push({ name: sName, imageCount: sCount });
+  }
+  if (!sections.length) { toast.error('No sections to save'); return; }
+  const name = prompt('Template name:', sections.map(s => s.name).join('/'));
+  if (!name) return;
+  const tpls = getTemplates();
+  tpls.unshift({ name, sections });
+  saveTemplates(tpls.slice(0, 10)); // keep max 10
+  refreshTemplateDropdown();
+  toast.success('Template saved', name);
+}
+
+// --- Sequel suggestion ---
+let _sequelHint = null;
+
+async function onCharacterChange() {
+  const charId = document.getElementById('batch-character').value;
+  const hintEl = document.getElementById('sequel-hint');
+  hintEl.style.display = 'none';
+  _sequelHint = null;
+  if (!charId) return;
+  try {
+    const res = await api.get(`/characters/${charId}/suggest-sequel`);
+    if (res.suggestion) {
+      _sequelHint = res.suggestion;
+      document.getElementById('sequel-hint-text').textContent = res.suggestion;
+      hintEl.style.display = '';
+    }
+  } catch (_) {}
+}
+
+async function applyQuickDateRange(days) {
+  const charId = document.getElementById('batch-character').value;
+  const hintEl = document.getElementById('quick-date-hint');
+
+  // Find last end date from loaded batches for this character (or globally if none selected)
+  let startDate;
+  const charBatches = charId
+    ? batches.filter(b => b.characterId === charId || b.character_id === charId)
+    : batches;
+
+  if (charBatches.length) {
+    // Find the latest endDate across batches for this character
+    const sorted = [...charBatches].sort((a, b) => (a.endDate > b.endDate ? -1 : 1));
+    const lastEnd = sorted[0].endDate; // "YYYY-MM-DD"
+    const d = new Date(lastEnd);
+    d.setDate(d.getDate() + 1);
+    startDate = d;
+    hintEl.textContent = `Continuing after ${lastEnd}`;
+  } else {
+    // No previous batches — start from today
+    startDate = new Date();
+    startDate.setHours(0, 0, 0, 0);
+    hintEl.textContent = 'No previous batch — starting from today';
+  }
+
+  const endDate = new Date(startDate);
+  endDate.setDate(endDate.getDate() + days - 1);
+
+  const fmt = d => d.toISOString().slice(0, 10);
+  document.getElementById('batch-start').value = fmt(startDate);
+  document.getElementById('batch-end').value = fmt(endDate);
+}
+
+function applySequelHint() {
+  if (_sequelHint) {
+    document.getElementById('batch-summary').value = _sequelHint;
+    document.getElementById('sequel-hint').style.display = 'none';
+    toast.info('Sequel context applied');
+  }
+}
+
+// --- Duplicate batch ---
+async function duplicateBatch(id, event) {
+  event.stopPropagation();
+  try {
+    const result = await api.post(`/batches/${id}/duplicate`, {});
+    toast.success('Batch duplicated', 'Redirecting to new batch…');
+    setTimeout(() => window.location = `batch-detail.html?id=${result._id}`, 800);
+  } catch (e) {
+    toast.error('Duplicate failed', e.message);
+  }
+}
+
+function openCreateModal() {
+  resetForm();
+  openModal('create-modal');
+}
+
+function resetForm() {
+  document.getElementById('batch-name').value = '';
+  document.getElementById('batch-character').value = '';
+  document.getElementById('batch-start').value = '';
+  document.getElementById('batch-end').value = '';
+  document.getElementById('batch-summary').value = '';
+  document.getElementById('sequel-hint').style.display = 'none';
+  document.getElementById('quick-date-hint').textContent = '';
+  _sequelHint = null;
+  document.getElementById('sections-builder').innerHTML = '';
+  refreshTemplateDropdown();
+  // Add 3 default sections
+  ['Morning', 'Evening', 'Night'].forEach((name, i) => addSection(name, i === 0 ? 3 : i === 1 ? 5 : 10));
+}
+
+let sectionCount = 0;
+function addSection(name = '', count = 3) {
+  const id = sectionCount++;
+  const div = document.createElement('div');
+  div.id = `section-row-${id}`;
+  div.style.cssText = 'display:flex;gap:var(--space-3);align-items:center';
+  div.innerHTML = `
+    <input class="field__input" type="text" placeholder="Section name (e.g. Morning)" value="${name}" style="flex:1" />
+    <input class="field__input" type="number" min="1" max="50" value="${count}" style="width:80px" title="Number of images" />
+    <button class="btn btn--icon btn--ghost" onclick="document.getElementById('section-row-${id}').remove()" title="Remove">✕</button>
+  `;
+  document.getElementById('sections-builder').appendChild(div);
+}
+
+async function saveBatch() {
+  const name = document.getElementById('batch-name').value.trim();
+  const charId = document.getElementById('batch-character').value;
+  const start = document.getElementById('batch-start').value;
+  const end = document.getElementById('batch-end').value;
+  const summary = document.getElementById('batch-summary').value.trim();
+
+  if (!name) { toast.error('Batch name is required'); return; }
+  if (!charId) { toast.error('Please select a character'); return; }
+  if (!start || !end) { toast.error('Start and end dates are required'); return; }
+
+  const rows = document.querySelectorAll('#sections-builder > div');
+  const sections = [];
+  for (const row of rows) {
+    const [nameInput, countInput] = row.querySelectorAll('input');
+    const sName = nameInput.value.trim();
+    const sCount = parseInt(countInput.value, 10);
+    if (sName && sCount > 0) sections.push({ name: sName, imageCount: sCount });
+  }
+  if (!sections.length) { toast.error('Add at least one section'); return; }
+  const names = sections.map(s => s.name.toLowerCase());
+  if (new Set(names).size !== names.length) { toast.error('Section names must be unique'); return; }
+
+  const btn = document.getElementById('save-batch-btn');
+  btn.disabled = true; btn.textContent = 'Creating…';
+
+  try {
+    const result = await api.post('/batches', { batchName: name, characterId: charId, startDate: start, endDate: end, sections, contentSummary: summary });
+    toast.success('Batch created', 'Redirecting to batch detail…');
+    closeModal('create-modal');
+    setTimeout(() => window.location = `batch-detail.html?id=${result._id}`, 800);
+  } catch (e) {
+    toast.error('Failed to create batch', e.message);
+  } finally {
+    btn.disabled = false; btn.textContent = 'Create Batch';
+  }
+}
+
+async function quickGenerate(id, event) {
+  event.stopPropagation();
+  try {
+    await api.post(`/batches/${id}/generate`, {});
+    toast.success('Generation started', 'Redirecting to batch detail…');
+    setTimeout(() => window.location = `batch-detail.html?id=${id}`, 800);
+  } catch (e) {
+    toast.error('Failed to start generation', e.message);
+  }
+}
+
+// --- Batch edit ---
+let _editingBatchId = null;
+
+function openEditModal(id, event) {
+  event.stopPropagation();
+  const b = batches.find(x => x._id === id);
+  if (!b) return;
+  _editingBatchId = id;
+  document.getElementById('edit-name').value = b.batchName;
+  document.getElementById('edit-start').value = b.startDate;
+  document.getElementById('edit-end').value = b.endDate;
+  document.getElementById('edit-summary').value = b.contentSummary || '';
+  openModal('edit-modal');
+}
+
+async function saveEdit() {
+  const name = document.getElementById('edit-name').value.trim();
+  const start = document.getElementById('edit-start').value;
+  const end = document.getElementById('edit-end').value;
+  const summary = document.getElementById('edit-summary').value.trim();
+  if (!name) { toast.error('Batch name is required'); return; }
+  if (!start || !end) { toast.error('Dates are required'); return; }
+  const btn = document.getElementById('save-edit-btn');
+  btn.disabled = true; btn.textContent = 'Saving…';
+  try {
+    await api.put(`/batches/${_editingBatchId}`, { batchName: name, startDate: start, endDate: end, contentSummary: summary });
+    toast.success('Batch updated');
+    closeModal('edit-modal');
+    await loadBatches();
+  } catch (e) {
+    toast.error('Update failed', e.message);
+  } finally {
+    btn.disabled = false; btn.textContent = 'Save Changes';
+  }
+}
+
+async function deleteBatch(id, name) {
+  confirmAction(`Delete batch "${name}"? All generated content will be lost.`, async () => {
+    try {
+      await api.delete(`/batches/${id}`);
+      toast.success('Batch deleted');
+      await loadBatches();
+    } catch (e) {
+      toast.error('Delete failed', e.message);
+    }
+  });
+}
+
+init();
+</script>
+</body>
+</html>

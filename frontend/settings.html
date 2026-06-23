@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Settings — Persona AI Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css?v=3" />
+</head>
+<body>
+<div class="app-shell">
+
+  <aside class="sidebar">
+    <div class="sidebar__logo">
+      <div class="sidebar__logo-icon">✦</div>
+      <div class="sidebar__logo-text">Persona AI<span>Studio v2.0</span></div>
+    </div>
+    <nav class="sidebar__nav">
+      <div class="nav-group__label">Main</div>
+      <a href="index.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/></svg>
+        Dashboard
+      </a>
+      <div class="nav-group__label">Content</div>
+      <a href="characters.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/></svg>
+        Characters
+      </a>
+      <a href="batches.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 20 20" fill="currentColor"><path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"/></svg>
+        Batches
+      </a>
+      <a href="calendar.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/></svg>
+        Calendar
+      </a>
+      <div class="nav-group__label">System</div>
+      <a href="settings.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/></svg>
+        Settings
+      </a>
+    </nav>
+        <div class="sidebar__footer">
+      <button class="sidebar__signout" onclick="auth.logout()">
+        <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M3 3a1 1 0 011 1v12a1 1 0 11-2 0V4a1 1 0 011-1zm7.707 3.293a1 1 0 010 1.414L9.414 9H17a1 1 0 110 2H9.414l1.293 1.293a1 1 0 01-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+        Sign Out
+      </button>
+      <div class="sidebar__version">Persona AI Studio v2.0</div>
+    </div>
+  </aside>
+
+  <div class="main-content">
+    <header class="topbar">
+      <div class="topbar__left"><h1 class="topbar__title">Settings</h1></div>
+      <div class="topbar__actions"></div>
+    </header>
+
+    <main class="page">
+      <div class="settings-grid">
+        <!-- Left nav -->
+        <div class="settings-nav">
+          <div class="settings-nav__item active" onclick="showSection('api')" id="nav-api">AI Provider</div>
+          <div class="settings-nav__item" onclick="showSection('status')" id="nav-status">System Status</div>
+          <div class="settings-nav__item" onclick="showSection('about')" id="nav-about">About</div>
+        </div>
+
+        <!-- Right content -->
+        <div>
+          <!-- AI Provider -->
+          <div id="section-api" class="settings-section active">
+            <div class="section">
+              <div class="section__header">
+                <h2 class="section__title">AI Provider</h2>
+              </div>
+              <div class="section__body stack">
+                <p style="font-size:var(--text-sm);color:var(--color-text-muted)">
+                  Configured via the <code style="font-family:var(--font-mono);background:var(--color-surface-raised);padding:2px 6px;border-radius:4px">.env</code> file.
+                  Restart the backend after making changes.
+                </p>
+                <div class="credential-row">
+                  <div class="credential-row__label">Active Provider</div>
+                  <div class="credential-row__value" id="ai-provider-val">Checking…</div>
+                  <div class="credential-row__status" id="ai-provider-badge"></div>
+                </div>
+                <div class="credential-row">
+                  <div class="credential-row__label">Active Model</div>
+                  <div class="credential-row__value" id="ai-model-val">—</div>
+                  <div class="credential-row__status"></div>
+                </div>
+                <div class="credential-row">
+                  <div class="credential-row__label">Gemini API Key</div>
+                  <div class="credential-row__value">Set <code style="font-family:var(--font-mono);font-size:0.8em">GEMINI_API_KEY</code> in .env (must start with AIza)</div>
+                  <div class="credential-row__status" id="gemini-badge"></div>
+                </div>
+                <div class="credential-row">
+                  <div class="credential-row__label">Groq API Key</div>
+                  <div class="credential-row__value">Set <code style="font-family:var(--font-mono);font-size:0.8em">GROQ_API_KEY</code> + <code style="font-family:var(--font-mono);font-size:0.8em">GROQ_MODEL=groq/compound-mini</code></div>
+                  <div class="credential-row__status" id="groq-badge"></div>
+                </div>
+                <div class="credential-row">
+                  <div class="credential-row__label">MongoDB</div>
+                  <div class="credential-row__value" id="mongo-status">Checking…</div>
+                  <div class="credential-row__status" id="mongo-badge"></div>
+                </div>
+                <div style="margin-top:var(--space-4);display:flex;align-items:center;gap:var(--space-4)">
+                  <button class="btn btn--sm btn--secondary" id="test-ai-btn" onclick="testAiConnection()">Test AI Connection</button>
+                  <span id="test-ai-result" style="font-size:var(--text-sm);color:var(--color-text-muted)"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Status -->
+          <div id="section-status" class="settings-section">
+            <div class="section">
+              <div class="section__header">
+                <h2 class="section__title">System Status</h2>
+                <button class="btn btn--sm btn--secondary" onclick="checkHealth()">Refresh</button>
+              </div>
+              <div class="section__body" id="health-content">
+                <div class="spinner" style="margin:0 auto"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- About -->
+          <div id="section-about" class="settings-section">
+            <div class="section">
+              <div class="section__header">
+                <h2 class="section__title">About</h2>
+              </div>
+              <div class="section__body stack">
+                <div class="credential-row">
+                  <div class="credential-row__label">Version</div>
+                  <div class="credential-row__value" id="about-version">—</div>
+                </div>
+                <div class="credential-row">
+                  <div class="credential-row__label">Stack</div>
+                  <div class="credential-row__value">FastAPI · MongoDB · Groq / Gemini · Vanilla JS</div>
+                </div>
+                <div class="credential-row">
+                  <div class="credential-row__label">Output</div>
+                  <div class="credential-row__value">Text descriptions only — paste into any image generator</div>
+                </div>
+                <p style="font-size:var(--text-xs);color:var(--color-text-dim);margin-top:var(--space-4)">
+                  API docs available at <code style="font-family:var(--font-mono)">/api/docs</code>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="toast-container"></div>
+<script src="js/common.js?v=2"></script><script>auth.guard();</script>
+<script>
+function showSection(name) {
+  document.querySelectorAll('.settings-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.settings-nav__item').forEach(n => n.classList.remove('active'));
+  document.getElementById(`section-${name}`)?.classList.add('active');
+  document.getElementById(`nav-${name}`)?.classList.add('active');
+}
+
+async function checkHealth() {
+  const content = document.getElementById('health-content');
+  content.innerHTML = `<div class="spinner" style="margin:0 auto"></div>`;
+  try {
+    const health = await api.get('/health');
+
+    // Status section
+    content.innerHTML = `
+      <div class="credential-row">
+        <div class="credential-row__label">API Backend</div>
+        <div class="credential-row__value">v${health.version}</div>
+        <div class="credential-row__status"><span class="badge badge--active">Online</span></div>
+      </div>
+      <div class="credential-row">
+        <div class="credential-row__label">MongoDB</div>
+        <div class="credential-row__value">Connected</div>
+        <div class="credential-row__status"><span class="badge badge--active">OK</span></div>
+      </div>
+      <div class="credential-row">
+        <div class="credential-row__label">AI Provider</div>
+        <div class="credential-row__value">${health.ai_provider} — ${health.ai_model || '—'}</div>
+        <div class="credential-row__status"><span class="badge badge--${health.ai_provider === 'none' ? 'failed' : 'active'}">${health.ai_provider === 'none' ? 'Not Set' : 'Configured'}</span></div>
+      </div>
+    `;
+
+    // AI Provider section
+    const providerLabel = health.ai_provider === 'groq' ? 'Groq' : health.ai_provider === 'gemini' ? 'Gemini' : 'None';
+    document.getElementById('ai-provider-val').textContent = providerLabel;
+    document.getElementById('ai-provider-badge').innerHTML = `<span class="badge badge--${health.ai_provider === 'none' ? 'failed' : 'active'}">${health.ai_provider === 'none' ? 'Not Set' : 'Active'}</span>`;
+    document.getElementById('ai-model-val').textContent = health.ai_model || '—';
+    document.getElementById('mongo-status').textContent = 'Connected';
+    document.getElementById('mongo-badge').innerHTML = `<span class="badge badge--active">OK</span>`;
+    document.getElementById('gemini-badge').innerHTML = `<span class="badge badge--${health.ai_provider === 'gemini' ? 'active' : 'created'}">${health.ai_provider === 'gemini' ? 'Active' : 'Inactive'}</span>`;
+    document.getElementById('groq-badge').innerHTML = `<span class="badge badge--${health.ai_provider === 'groq' ? 'active' : 'created'}">${health.ai_provider === 'groq' ? 'Active' : 'Inactive'}</span>`;
+    document.getElementById('about-version').textContent = `v${health.version}`;
+  } catch (e) {
+    content.innerHTML = `<div style="color:var(--color-error);font-size:var(--text-sm)">API offline: ${e.message}</div>`;
+    document.getElementById('ai-provider-val').textContent = 'Unreachable';
+    document.getElementById('ai-provider-badge').innerHTML = `<span class="badge badge--failed">Offline</span>`;
+    document.getElementById('mongo-status').textContent = 'Unreachable';
+    document.getElementById('mongo-badge').innerHTML = `<span class="badge badge--failed">Offline</span>`;
+  }
+}
+
+async function testAiConnection() {
+  const btn = document.getElementById('test-ai-btn');
+  const result = document.getElementById('test-ai-result');
+  btn.disabled = true;
+  btn.textContent = 'Testing…';
+  result.textContent = '';
+  try {
+    const res = await api.post('/dashboard/test-ai', {});
+    if (res.success) {
+      result.innerHTML = `<span style="color:var(--color-success)">✓</span> ${res.provider} · ${res.model} · ${res.latency_ms}ms`;
+    } else {
+      result.innerHTML = `<span style="color:var(--color-error)">✗</span> ${res.error || 'Unknown error'}`;
+    }
+  } catch (e) {
+    result.innerHTML = `<span style="color:var(--color-error)">✗</span> ${e.message}`;
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Test AI Connection';
+  }
+}
+
+checkHealth();
+</script>
+</body>
+</html>

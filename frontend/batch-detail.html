@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Batch Detail — Persona AI Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css?v=3" />
+</head>
+<body>
+<div class="app-shell">
+
+  <aside class="sidebar" aria-label="Main navigation">
+    <div class="sidebar__logo">
+      <div class="sidebar__logo-icon">✦</div>
+      <div class="sidebar__logo-text">Persona AI<span>Studio v2.0</span></div>
+    </div>
+    <nav class="sidebar__nav">
+      <div class="nav-group__label">Main</div>
+      <a href="index.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/></svg>
+        Dashboard
+      </a>
+      <div class="nav-group__label">Content</div>
+      <a href="characters.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/></svg>
+        Characters
+      </a>
+      <a href="batches.html" class="nav-item active">
+        <svg class="nav-item__icon" viewBox="0 0 20 20" fill="currentColor"><path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"/></svg>
+        Batches
+      </a>
+      <a href="calendar.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/></svg>
+        Calendar
+      </a>
+      <div class="nav-group__label">System</div>
+      <a href="settings.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/></svg>
+        Settings
+      </a>
+    </nav>
+        <div class="sidebar__footer">
+      <button class="sidebar__signout" onclick="auth.logout()">
+        <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M3 3a1 1 0 011 1v12a1 1 0 11-2 0V4a1 1 0 011-1zm7.707 3.293a1 1 0 010 1.414L9.414 9H17a1 1 0 110 2H9.414l1.293 1.293a1 1 0 01-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+        Sign Out
+      </button>
+      <div class="sidebar__version">Persona AI Studio v2.0</div>
+    </div>
+  </aside>
+
+  <div class="main-content">
+    <header class="topbar">
+      <div class="topbar__left">
+        <a href="batches.html" class="btn btn--icon btn--ghost" title="Back to batches">
+          <svg viewBox="0 0 20 20" fill="currentColor" style="width:16px;height:16px"><path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"/></svg>
+        </a>
+        <h1 class="topbar__title" id="batch-title">Loading…</h1>
+      </div>
+      <div class="topbar__actions" id="topbar-actions"></div>
+    </header>
+
+    <main class="page">
+      <!-- Batch summary bar -->
+      <div id="batch-meta" class="batch-meta-bar" style="display:none">
+        <div class="batch-meta-bar__items" id="batch-meta-items"></div>
+      </div>
+
+      <!-- Status / Generate area -->
+      <div id="status-area"></div>
+
+      <!-- Day tabs -->
+      <div id="day-tabs-wrap" style="display:none">
+        <div class="day-tabs" id="day-tabs"></div>
+        <div id="day-content"></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="toast-container"></div>
+<script src="js/common.js?v=2"></script><script>auth.guard();</script>
+<script>
+const params = new URLSearchParams(location.search);
+const BATCH_ID = params.get('id');
+let batch = null;
+let character = null;
+let allDays = [];
+let activeDay = 1;
+let pollTimer = null;
+let copyWithAppearance = false;
+let narrativeMode = false;
+
+// --- "Used" tracking ---
+const USED_KEY = () => `persona_used_${BATCH_ID}`;
+
+function getUsed() {
+  try { return new Set(JSON.parse(localStorage.getItem(USED_KEY()) || '[]')); } catch { return new Set(); }
+}
+
+function setUsed(set) {
+  localStorage.setItem(USED_KEY(), JSON.stringify([...set]));
+}
+
+function usedKey(dayNo, sectionName, imageNo) {
+  return `${dayNo}:${sectionName}:${imageNo}`;
+}
+
+function isUsed(dayNo, sectionName, imageNo) {
+  return getUsed().has(usedKey(dayNo, sectionName, imageNo));
+}
+
+function markUsed(dayNo, sectionName, imageNo) {
+  const s = getUsed();
+  s.add(usedKey(dayNo, sectionName, imageNo));
+  setUsed(s);
+}
+
+function clearAllUsed() {
+  localStorage.removeItem(USED_KEY());
+}
+
+if (!BATCH_ID) { location.href = 'batches.html'; }
+
+async function init() {
+  await loadBatch();
+  // Load character in background for appearance toggle
+  if (batch?.characterId) {
+    try { character = await api.get(`/characters/${batch.characterId}`); } catch (_) {}
+  }
+}
+
+async function loadBatch() {
+  try {
+    batch = await api.get(`/batches/${BATCH_ID}`);
+    renderHeader();
+
+    if (batch.status === 'COMPLETED' || batch.status === 'PARTIAL') {
+      clearPoll();
+      await loadDays();
+      showDayTabs();
+      if (batch.status === 'PARTIAL') showPartialWarning(batch.errorMessage);
+    } else if (batch.status === 'GENERATING') {
+      showGenerating();
+      startPoll();
+    } else if (batch.status === 'FAILED') {
+      showError(batch.errorMessage);
+    } else {
+      showReady();
+    }
+  } catch (e) {
+    document.getElementById('batch-title').textContent = 'Not found';
+    document.getElementById('status-area').innerHTML = `<div class="empty-state">Batch not found. <a href="batches.html" style="color:var(--color-primary)">Go back</a></div>`;
+  }
+}
+
+function renderHeader() {
+  document.title = `${batch.batchName} — Persona AI Studio`;
+  document.getElementById('batch-title').textContent = batch.batchName;
+
+  const days = batch.totalDays || 0;
+  const imgs = batch.totalImages || 0;
+  const sections = (batch.sections || []).map(s => `${s.name} (${s.imageCount})`).join(' · ');
+
+  const metaBar = document.getElementById('batch-meta');
+  metaBar.style.display = '';
+  document.getElementById('batch-meta-items').innerHTML = `
+    <div class="bmi"><span class="bmi__label">Character</span><span class="bmi__val">${batch.characterName || '—'}</span></div>
+    <div class="bmi"><span class="bmi__label">Dates</span><span class="bmi__val">${batch.startDate} → ${batch.endDate}</span></div>
+    <div class="bmi"><span class="bmi__label">Days</span><span class="bmi__val">${days}</span></div>
+    <div class="bmi"><span class="bmi__label">Total Images</span><span class="bmi__val">${imgs}</span></div>
+    <div class="bmi"><span class="bmi__label">Sections</span><span class="bmi__val">${sections || '—'}</span></div>
+    ${batch.contentSummary ? `<div class="bmi bmi--wide"><span class="bmi__label">Context</span><span class="bmi__val" style="font-style:italic;color:var(--color-text-muted)">${batch.contentSummary}</span></div>` : ''}
+    <div class="bmi"><span class="bmi__label">Status</span><span class="bmi__val"><span class="badge badge--${batch.status.toLowerCase()}">${batch.status}</span></span></div>
+  `;
+
+  const canRegenerate = ['COMPLETED', 'PARTIAL', 'FAILED'].includes(batch.status);
+  const canExport = ['COMPLETED', 'PARTIAL'].includes(batch.status) && allDays.length > 0;
+  const hasUsed = canExport && getUsed().size > 0;
+  document.getElementById('topbar-actions').innerHTML = [
+    canExport ? `<button class="btn btn--sm btn--ghost" onclick="exportBatch()">Export .txt</button>` : '',
+    canExport ? `<button class="btn btn--sm btn--ghost ${narrativeMode ? 'btn--active' : ''}" onclick="toggleNarrative()" title="Switch between structured and narrative prompt format">
+      ${narrativeMode ? '✓ Narrative' : 'Narrative'}
+    </button>` : '',
+    canExport ? `<button class="btn btn--sm btn--ghost ${copyWithAppearance ? 'btn--active' : ''}" onclick="toggleAppearance()" title="Include character appearance in copied prompts" id="appearance-toggle">
+      ${copyWithAppearance ? '✓ + Appearance' : '+ Appearance'}
+    </button>` : '',
+    hasUsed ? `<button class="btn btn--sm btn--ghost" onclick="clearUsedAndRefresh()" title="Clear all used markers">Clear used (${getUsed().size})</button>` : '',
+    canRegenerate ? `<button class="btn btn--sm btn--secondary" onclick="regenerate()">Regenerate All</button>` : '',
+  ].join('');
+}
+
+function showReady() {
+  document.getElementById('status-area').innerHTML = `
+    <div class="generate-cta">
+      <div style="font-size:2.5rem">✦</div>
+      <h2 style="font-size:var(--text-xl);margin:var(--space-3) 0 var(--space-2)">Ready to Generate</h2>
+      <p style="color:var(--color-text-muted);font-size:var(--text-sm);max-width:400px;text-align:center;margin-bottom:var(--space-5)">
+        Gemini will generate outfit descriptions, image prompts and hashtags for all ${batch.totalDays} day${batch.totalDays !== 1 ? 's' : ''} and ${(batch.sections || []).length} section${(batch.sections || []).length !== 1 ? 's' : ''} per day.
+      </p>
+      <button class="btn btn--primary" onclick="startGeneration()">Generate Descriptions</button>
+    </div>`;
+}
+
+function showGenerating() {
+  const done = batch.generatedSections || 0;
+  const total = batch.totalSections || 0;
+  const progressHtml = total > 0 ? `
+    <div style="width:260px;margin-top:var(--space-4)">
+      <div style="display:flex;justify-content:space-between;font-size:var(--text-xs);color:var(--color-text-muted);margin-bottom:var(--space-2)">
+        <span>Sections generated</span><span>${done} / ${total}</span>
+      </div>
+      <div class="progress-bar"><div class="progress-bar__fill" style="width:${total > 0 ? Math.round(done/total*100) : 0}%"></div></div>
+    </div>` : '';
+  document.getElementById('status-area').innerHTML = `
+    <div class="generate-cta">
+      <div class="spinner spinner--lg" style="margin-bottom:var(--space-4)"></div>
+      <h2 style="font-size:var(--text-xl);margin-bottom:var(--space-2)">Generating…</h2>
+      <p style="color:var(--color-text-muted);font-size:var(--text-sm)">AI is creating your content plan. Each section takes ~20 seconds.</p>
+      ${progressHtml}
+    </div>`;
+}
+
+function showPartialWarning(msg) {
+  const failedDays = msg ? msg.replace('Days failed: ', '') : '';
+  const warn = document.createElement('div');
+  warn.className = 'partial-warning';
+  warn.innerHTML = `<span style="color:var(--color-warning)">⚠ Partial generation</span> — some days failed (${failedDays}). Content below is from successful days only. <button class="btn btn--sm btn--ghost" style="margin-left:var(--space-3)" onclick="regenerate()">Retry full batch</button>`;
+  document.getElementById('day-tabs-wrap').prepend(warn);
+}
+
+function showError(msg) {
+  document.getElementById('status-area').innerHTML = `
+    <div class="generate-cta">
+      <div style="font-size:2rem;color:var(--color-error)">⚠</div>
+      <h2 style="font-size:var(--text-xl);margin:var(--space-3) 0 var(--space-2);color:var(--color-error)">Generation Failed</h2>
+      ${msg ? `<p style="color:var(--color-text-muted);font-size:var(--text-sm);margin-bottom:var(--space-3)">${msg}</p>` : ''}
+      <button class="btn btn--primary" onclick="startGeneration()">Try Again</button>
+    </div>`;
+}
+
+async function startGeneration() {
+  try {
+    await api.post(`/batches/${BATCH_ID}/generate`, {});
+    batch.status = 'GENERATING';
+    renderHeader();
+    showGenerating();
+    startPoll();
+  } catch (e) {
+    toast.error('Failed to start generation', e.message);
+  }
+}
+
+async function regenerate() {
+  confirmAction('Regenerate? This will replace all existing descriptions.', async () => {
+    document.getElementById('day-tabs-wrap').style.display = 'none';
+    await startGeneration();
+  });
+}
+
+function startPoll() {
+  if (pollTimer) return;
+  pollTimer = setInterval(async () => {
+    try {
+      const updated = await api.get(`/batches/${BATCH_ID}`);
+      batch = updated;
+      if (updated.status === 'COMPLETED') {
+        clearPoll();
+        renderHeader();
+        document.getElementById('status-area').innerHTML = '';
+        await loadDays();
+        showDayTabs();
+        toast.success('Generation complete', `${updated.totalImages} image descriptions created`);
+      } else if (updated.status === 'PARTIAL') {
+        clearPoll();
+        renderHeader();
+        document.getElementById('status-area').innerHTML = '';
+        await loadDays();
+        showDayTabs();
+        showPartialWarning(updated.errorMessage);
+        toast.warning('Partial generation', updated.errorMessage);
+      } else if (updated.status === 'FAILED') {
+        clearPoll();
+        renderHeader();
+        showError(updated.errorMessage);
+      } else if (updated.status === 'GENERATING') {
+        // Refresh progress bar in place
+        showGenerating();
+      }
+    } catch (_) {}
+  }, 4000);
+}
+
+function clearPoll() {
+  if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
+}
+
+async function loadDays() {
+  allDays = await api.get(`/batches/${BATCH_ID}/days`);
+}
+
+function showDayTabs() {
+  const wrap = document.getElementById('day-tabs-wrap');
+  wrap.style.display = '';
+  document.getElementById('status-area').innerHTML = '';
+  renderHeader(); // re-render to show Export button now that allDays is populated
+
+  const tabsEl = document.getElementById('day-tabs');
+  tabsEl.innerHTML = allDays.map(d => {
+    const date = new Date(d.date + 'T00:00:00');
+    const label = date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+    return `<button class="day-tab" data-day="${d.dayNo}" onclick="selectDay(${d.dayNo})">
+      <span class="day-tab__num">Day ${d.dayNo}</span>
+      <span class="day-tab__date">${label}</span>
+    </button>`;
+  }).join('');
+
+  selectDay(allDays[0]?.dayNo || 1);
+}
+
+function selectDay(dayNo) {
+  activeDay = dayNo;
+  document.querySelectorAll('.day-tab').forEach(t => t.classList.toggle('active', parseInt(t.dataset.day) === dayNo));
+  const day = allDays.find(d => d.dayNo === dayNo);
+  renderDayContent(day);
+}
+
+function buildCopyablePrompt(sec, img) {
+  // Use the rich fullImagePrompt if available (new batches)
+  if (img.fullImagePrompt && !narrativeMode) {
+    if (copyWithAppearance && character?.appearance) {
+      return character.appearance + '. ' + img.fullImagePrompt;
+    }
+    return img.fullImagePrompt;
+  }
+  if (narrativeMode) {
+    return buildNarrativePrompt(sec, img);
+  }
+  const parts = [];
+  if (copyWithAppearance && character?.appearance) parts.push(character.appearance);
+  if (sec.outfitFamily)        parts.push(`Outfit: ${sec.outfitFamily}`);
+  if (sec.lightingMood)        parts.push(`Lighting: ${sec.lightingMood}`);
+  if (sec.cameraStyle)         parts.push(`Camera: ${sec.cameraStyle}`);
+  if (sec.backgroundLocation)  parts.push(`Location: ${sec.backgroundLocation}`);
+  if (img.pose)                parts.push(`Pose: ${img.pose}`);
+  if (img.bodyAngle)           parts.push(`Body angle: ${img.bodyAngle}`);
+  if (img.handPlacement)       parts.push(`Hand placement: ${img.handPlacement}`);
+  if (img.framing)             parts.push(`Framing: ${img.framing}`);
+  return parts.join('. ');
+}
+
+function buildNarrativePrompt(sec, img) {
+  const parts = [];
+  if (copyWithAppearance && character?.appearance) parts.push(character.appearance);
+  // Outfit + location
+  const wearing = sec.outfitFamily ? `wearing ${sec.outfitFamily}` : '';
+  const at = sec.backgroundLocation ? `at ${sec.backgroundLocation}` : '';
+  if (wearing || at) parts.push([wearing, at].filter(Boolean).join(', '));
+  // Pose
+  if (img.pose) parts.push(img.pose);
+  // Body + hands
+  const body = [img.bodyAngle, img.handPlacement].filter(Boolean).join(', ');
+  if (body) parts.push(body);
+  // Framing + camera
+  const cam = [img.framing, sec.cameraStyle ? `${sec.cameraStyle} shot` : ''].filter(Boolean).join(', ');
+  if (cam) parts.push(cam);
+  // Lighting
+  if (sec.lightingMood) parts.push(`${sec.lightingMood} lighting`);
+  return parts.join('. ');
+}
+
+function toggleNarrative() {
+  narrativeMode = !narrativeMode;
+  renderHeader();
+  const day = allDays.find(d => d.dayNo === activeDay);
+  if (day) renderDayContent(day);
+  toast.info(narrativeMode ? 'Narrative format on' : 'Structured format on');
+}
+
+function toggleAppearance() {
+  copyWithAppearance = !copyWithAppearance;
+  renderHeader();
+  // Re-render current day so copy text updates
+  const day = allDays.find(d => d.dayNo === activeDay);
+  if (day) renderDayContent(day);
+  toast.info(copyWithAppearance ? 'Appearance included in copies' : 'Appearance removed from copies');
+}
+
+function renderDayContent(day) {
+  if (!day) return;
+  const content = document.getElementById('day-content');
+
+  const sectionsHtml = (day.sections || []).map((sec, secIdx) => {
+    const typeColor = {
+      'Evergreen': 'var(--color-success)',
+      'Growth': 'var(--color-info)',
+      'Controversial': 'var(--color-accent)'
+    }[sec.contentType] || 'var(--color-text-muted)';
+
+
+    const hashtagsStr = (sec.hashtags || []).join(' ');
+    const escapedHashtags = hashtagsStr.replace(/'/g, "\\'");
+    const hashtagsHtml = (sec.hashtags || []).map(h =>
+      `<span class="htag">${h}</span>`
+    ).join('');
+
+    const dayNoForSec = day.dayNo;
+    const escapedSecName = sec.sectionName.replace(/'/g, "\\'");
+
+    const imgsHtml = (sec.imageDescriptions || []).map((img, idx) => {
+      const fullPrompt = buildCopyablePrompt(sec, img);
+      const escapedPrompt = fullPrompt.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+      const rows = [
+        sec.outfitFamily       && `<div class="img-row img-row--shared"><span class="img-key">Outfit</span> ${sec.outfitFamily}</div>`,
+        sec.lightingMood       && `<div class="img-row img-row--shared"><span class="img-key">Lighting</span> ${sec.lightingMood}</div>`,
+        sec.cameraStyle        && `<div class="img-row img-row--shared"><span class="img-key">Camera</span> ${sec.cameraStyle}</div>`,
+        sec.backgroundLocation && `<div class="img-row img-row--shared"><span class="img-key">Location</span> ${sec.backgroundLocation}</div>`,
+        '<div class="img-row-divider"></div>',
+        img.pose          && `<div class="img-row"><span class="img-key">Pose</span> ${img.pose}</div>`,
+        img.bodyAngle     && `<div class="img-row"><span class="img-key">Angle</span> ${img.bodyAngle}</div>`,
+        img.handPlacement && `<div class="img-row"><span class="img-key">Hands</span> ${img.handPlacement}</div>`,
+        img.framing       && `<div class="img-row"><span class="img-key">Framing</span> ${img.framing}</div>`,
+        img.fullImagePrompt && '<div class="img-row-divider"></div>',
+        img.fullImagePrompt && `<div class="img-row img-row--full-prompt"><span class="img-key">Full Prompt</span><span class="img-full-prompt-text">${img.fullImagePrompt}</span></div>`,
+      ].filter(Boolean).join('');
+
+      const imageNo = img.imageNo || idx + 1;
+      const used = isUsed(day.dayNo, sec.sectionName, imageNo);
+      return `
+        <div class="img-card${used ? ' img-card--used' : ''}" onclick="copyPrompt('${escapedPrompt}', this, ${day.dayNo}, '${escapedSecName}', ${imageNo})" title="Click to copy full prompt">
+          ${used ? '<div class="img-card__used-badge">✓ used</div>' : ''}
+          <div class="img-card__num">${imageNo}</div>
+          <div class="img-card__body">${rows}</div>
+          <div class="img-card__copy-hint">Click to copy</div>
+        </div>`;
+    }).join('');
+
+    const allPromptsForSection = (sec.imageDescriptions || []).map((img, idx) => {
+      const num = img.imageNo || idx + 1;
+      return `Image ${num}: ${buildCopyablePrompt(sec, img)}`;
+    }).join('\n');
+    const escapedAllPrompts = allPromptsForSection.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+
+    return `
+      <div class="section-card" id="section-card-${dayNoForSec}-${sec.sectionOrder ?? 0}">
+        <div class="section-card__header">
+          <div style="display:flex;align-items:center;gap:var(--space-3)">
+            <span class="section-card__name">${sec.sectionName}</span>
+            <span class="section-card__type" style="color:${typeColor}">${sec.contentType}</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:var(--space-3)">
+            <span style="font-size:var(--text-xs);color:var(--color-text-muted)">${(sec.imageDescriptions || []).length} images</span>
+            <button class="btn btn--sm btn--ghost" onclick="copyAllSection('${escapedAllPrompts}', this)" title="Copy all image prompts for this section">Copy All</button>
+            <button class="btn btn--sm btn--ghost" onclick="regenerateSection(${dayNoForSec}, '${escapedSecName}', this)" title="Regenerate this section with AI">↺</button>
+          </div>
+        </div>
+        ${sec.sectionIntent ? `<p class="section-card__intent">${sec.sectionIntent}</p>` : ''}
+        ${sec.contentSummary ? `<p class="section-card__summary">${sec.contentSummary}</p>` : ''}
+        ${hashtagsHtml ? `<div class="hashtags-row">${hashtagsHtml}<button class="htag-copy-btn" onclick="copyHashtags('${escapedHashtags}', this)" title="Copy hashtags"># Copy</button></div>` : ''}
+        <div class="images-grid">${imgsHtml}</div>
+      </div>`;
+  }).join('');
+
+  content.innerHTML = sectionsHtml || '<div class="empty-state">No sections found for this day.</div>';
+}
+
+async function copyHashtags(text, btn) {
+  try {
+    await navigator.clipboard.writeText(text);
+    const orig = btn.textContent;
+    btn.textContent = 'Copied!';
+    btn.classList.add('htag-copy-btn--copied');
+    setTimeout(() => { btn.textContent = orig; btn.classList.remove('htag-copy-btn--copied'); }, 2000);
+  } catch (_) {
+    toast.error('Copy failed');
+  }
+}
+
+async function copyPrompt(text, el, dayNo, sectionName, imageNo) {
+  try {
+    await navigator.clipboard.writeText(text);
+    const hint = el.querySelector('.img-card__copy-hint');
+    if (hint) { hint.textContent = 'Copied!'; setTimeout(() => hint.textContent = 'Click to copy', 2000); }
+    el.classList.add('copied');
+    setTimeout(() => el.classList.remove('copied'), 600);
+    // Mark as used
+    if (dayNo !== undefined) {
+      markUsed(dayNo, sectionName, imageNo);
+      el.classList.add('img-card--used');
+      if (!el.querySelector('.img-card__used-badge')) {
+        const badge = document.createElement('div');
+        badge.className = 'img-card__used-badge';
+        badge.textContent = '✓ used';
+        el.prepend(badge);
+      }
+      renderHeader(); // refresh "Clear used" count
+    }
+  } catch (_) {
+    toast.error('Copy failed', 'Please copy manually');
+  }
+}
+
+function clearUsedAndRefresh() {
+  clearAllUsed();
+  const day = allDays.find(d => d.dayNo === activeDay);
+  if (day) renderDayContent(day);
+  renderHeader();
+  toast.info('Used markers cleared');
+}
+
+async function regenerateSection(dayNo, sectionName, btn) {
+  const card = btn.closest('.section-card');
+  const origLabel = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = '…';
+  card.style.opacity = '0.5';
+  card.style.pointerEvents = 'none';
+  try {
+    await api.post(`/batches/${BATCH_ID}/days/${dayNo}/sections/${encodeURIComponent(sectionName)}/generate`, {});
+    // Reload just this day from the API
+    const updatedDay = await api.get(`/batches/${BATCH_ID}/days/${dayNo}`);
+    const idx = allDays.findIndex(d => d.dayNo === dayNo);
+    if (idx >= 0) allDays[idx] = updatedDay;
+    renderDayContent(updatedDay);
+    toast.success('Section regenerated', sectionName);
+  } catch (e) {
+    toast.error('Regeneration failed', e.message);
+    card.style.opacity = '1';
+    card.style.pointerEvents = '';
+    btn.disabled = false;
+    btn.textContent = origLabel;
+  }
+}
+
+async function copyAllSection(text, btn) {
+  try {
+    await navigator.clipboard.writeText(text);
+    const orig = btn.textContent;
+    btn.textContent = 'Copied!';
+    btn.classList.add('htag-copy-btn--copied');
+    setTimeout(() => { btn.textContent = orig; btn.classList.remove('htag-copy-btn--copied'); }, 2000);
+  } catch (_) {
+    toast.error('Copy failed');
+  }
+}
+
+function exportBatch() {
+  if (!allDays.length) return;
+  const lines = [];
+  lines.push(`BATCH: ${batch.batchName}`);
+  lines.push(`Character: ${batch.characterName || '—'}`);
+  lines.push(`Dates: ${batch.startDate} → ${batch.endDate}`);
+  lines.push(`Total Images: ${batch.totalImages || 0}`);
+  lines.push('');
+
+  for (const day of allDays) {
+    lines.push(`${'='.repeat(60)}`);
+    lines.push(`DAY ${day.dayNo} — ${day.date}`);
+    lines.push(`${'='.repeat(60)}`);
+    for (const sec of (day.sections || [])) {
+      lines.push('');
+      lines.push(`  ${sec.sectionName.toUpperCase()} [${sec.contentType || ''}]`);
+      if (sec.sectionIntent) lines.push(`  Intent: ${sec.sectionIntent}`);
+      lines.push(`  Outfit: ${sec.outfitFamily || '—'}`);
+      lines.push(`  Lighting: ${sec.lightingMood || '—'}`);
+      lines.push(`  Camera: ${sec.cameraStyle || '—'}`);
+      lines.push(`  Location: ${sec.backgroundLocation || '—'}`);
+      if (sec.hashtags?.length) lines.push(`  Hashtags: ${sec.hashtags.join(' ')}`);
+      lines.push('');
+      for (const img of (sec.imageDescriptions || [])) {
+        const num = img.imageNo || (sec.imageDescriptions.indexOf(img) + 1);
+        lines.push(`    Image ${num}: ${buildCopyablePrompt(sec, img)}`);
+      }
+    }
+  }
+
+  const blob = new Blob([lines.join('\n')], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${batch.batchName.replace(/[^a-z0-9]/gi, '_')}.txt`;
+  a.click();
+  URL.revokeObjectURL(url);
+  toast.success('Exported', a.download);
+}
+
+init();
+</script>
+
+<style>
+/* Page-specific overrides for batch-detail — global styles are in styles.css */
+.progress-bar { margin-top: var(--space-3); }
+</style>
+</body>
+</html>

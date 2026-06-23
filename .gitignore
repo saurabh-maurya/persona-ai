@@ -1,0 +1,59 @@
+# Custom Ignores
+.claude/
+.run/
+.skills/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environments
+backend/.venv/
+.venv/
+venv/
+env/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Logs
+logs/
+*.log
+nohup.out
+
+# MongoDB
+*.bson
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Docker volumes / data
+data/
+mongo_data/
+
+# Uploads / generated images
+uploads/
+/tmp/persona_images/
+
+# PDFs / docs (large binary files)
+*.pdf
+
+# Sensitive docs
+implemenation_prompt.md

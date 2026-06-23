@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calendar — Persona AI Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css?v=3" />
+</head>
+<body>
+<div class="app-shell">
+
+  <aside class="sidebar" aria-label="Main navigation">
+    <div class="sidebar__logo">
+      <div class="sidebar__logo-icon">✦</div>
+      <div class="sidebar__logo-text">Persona AI<span>Studio v2.0</span></div>
+    </div>
+    <nav class="sidebar__nav">
+      <div class="nav-group__label">Main</div>
+      <a href="index.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/></svg>
+        Dashboard
+      </a>
+      <div class="nav-group__label">Content</div>
+      <a href="characters.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/></svg>
+        Characters
+      </a>
+      <a href="batches.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 20 20" fill="currentColor"><path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"/></svg>
+        Batches
+      </a>
+      <a href="calendar.html" class="nav-item active">
+        <svg class="nav-item__icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/></svg>
+        Calendar
+      </a>
+      <div class="nav-group__label">System</div>
+      <a href="settings.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/></svg>
+        Settings
+      </a>
+    </nav>
+        <div class="sidebar__footer">
+      <button class="sidebar__signout" onclick="auth.logout()">
+        <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M3 3a1 1 0 011 1v12a1 1 0 11-2 0V4a1 1 0 011-1zm7.707 3.293a1 1 0 010 1.414L9.414 9H17a1 1 0 110 2H9.414l1.293 1.293a1 1 0 01-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+        Sign Out
+      </button>
+      <div class="sidebar__version">Persona AI Studio v2.0</div>
+    </div>
+  </aside>
+
+  <div class="main-content">
+    <header class="topbar">
+      <div class="topbar__left"><h1 class="topbar__title">Content Calendar</h1></div>
+      <div class="topbar__actions">
+        <select class="field__select" id="filter-character" style="width:190px" onchange="render()">
+          <option value="">All Characters</option>
+        </select>
+      </div>
+    </header>
+
+    <main class="page">
+      <!-- Month nav -->
+      <div class="cal-nav">
+        <button class="btn btn--ghost btn--sm" onclick="shiftMonth(-1)">&#8592;</button>
+        <h2 class="cal-nav__title" id="cal-title"></h2>
+        <button class="btn btn--ghost btn--sm" onclick="shiftMonth(1)">&#8594;</button>
+        <button class="btn btn--ghost btn--sm" onclick="goToday()" style="margin-left:var(--space-3)">Today</button>
+      </div>
+
+      <!-- Legend -->
+      <div class="cal-legend">
+        <span class="cal-chip cal-chip--completed">Completed</span>
+        <span class="cal-chip cal-chip--generating">Generating</span>
+        <span class="cal-chip cal-chip--created">Planned</span>
+        <span class="cal-chip cal-chip--partial">Partial</span>
+        <span class="cal-chip cal-chip--failed">Failed</span>
+      </div>
+
+      <!-- Calendar grid -->
+      <div class="cal-grid-wrap">
+        <div class="cal-grid" id="cal-grid"></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="toast-container"></div>
+<script src="js/common.js?v=2"></script><script>auth.guard();</script>
+<script>
+let batches = [];
+let year = new Date().getFullYear();
+let month = new Date().getMonth(); // 0-indexed
+
+async function init() {
+  try {
+    batches = await api.get('/batches');
+    const chars = await api.get('/characters');
+    const sel = document.getElementById('filter-character');
+    sel.innerHTML = '<option value="">All Characters</option>' +
+      chars.map(c => `<option value="${c._id}">${c.name}</option>`).join('');
+  } catch (e) {
+    toast.error('Failed to load data', e.message);
+  }
+  render();
+}
+
+function shiftMonth(delta) {
+  month += delta;
+  if (month > 11) { month = 0; year++; }
+  if (month < 0)  { month = 11; year--; }
+  render();
+}
+
+function goToday() {
+  const now = new Date();
+  year = now.getFullYear();
+  month = now.getMonth();
+  render();
+}
+
+// Parse "YYYY-MM-DD" as local date (avoid UTC shift)
+function parseLocal(str) {
+  const [y, m, d] = str.split('-').map(Number);
+  return new Date(y, m - 1, d);
+}
+
+function toYMD(date) {
+  return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
+}
+
+function render() {
+  const charFilter = document.getElementById('filter-character').value;
+  const filtered = charFilter ? batches.filter(b => b.characterId === charFilter) : batches;
+
+  // Title
+  const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('cal-title').textContent = `${monthNames[month]} ${year}`;
+
+  // Build day → batches map
+  const dayMap = {}; // "YYYY-MM-DD" → [batch,...]
+
+  for (const b of filtered) {
+    if (!b.startDate || !b.endDate) continue;
+    const start = parseLocal(b.startDate);
+    const end   = parseLocal(b.endDate);
+    const cur   = new Date(start);
+    while (cur <= end) {
+      const key = toYMD(cur);
+      if (!dayMap[key]) dayMap[key] = [];
+      dayMap[key].push(b);
+      cur.setDate(cur.getDate() + 1);
+    }
+  }
+
+  // First day of month
+  const firstDay = new Date(year, month, 1);
+  // 0=Sun..6=Sat → shift to Mon-start (0=Mon..6=Sun)
+  let startOffset = (firstDay.getDay() + 6) % 7;
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const today = toYMD(new Date());
+
+  const DOW = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  let html = DOW.map(d => `<div class="cal-dow">${d}</div>`).join('');
+
+  // Empty cells before day 1
+  for (let i = 0; i < startOffset; i++) {
+    html += `<div class="cal-cell cal-cell--empty"></div>`;
+  }
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const key = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isToday = key === today;
+    const dayBatches = dayMap[key] || [];
+
+    // Deduplicate by batch id (a batch covers multiple days, show it once per cell)
+    const seen = new Set();
+    const unique = dayBatches.filter(b => { if (seen.has(b._id)) return false; seen.add(b._id); return true; });
+
+    const chips = unique.map(b => {
+      const label = (b.batchName.length > 18 ? b.batchName.slice(0, 16) + '…' : b.batchName);
+      const st = b.status.toLowerCase();
+      return `<a class="cal-chip cal-chip--${st}" href="batch-detail.html?id=${b._id}" title="${b.batchName} (${b.characterName})" onclick="event.stopPropagation()">${label}</a>`;
+    }).join('');
+
+    html += `
+      <div class="cal-cell${isToday ? ' cal-cell--today' : ''}">
+        <span class="cal-cell__num${isToday ? ' cal-cell__num--today' : ''}">${d}</span>
+        <div class="cal-cell__chips">${chips}</div>
+      </div>`;
+  }
+
+  document.getElementById('cal-grid').innerHTML = html;
+}
+
+init();
+</script>
+</body>
+</html>

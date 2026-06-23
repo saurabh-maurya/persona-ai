@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign In — Persona AI Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Reset & base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      font-size: 1rem;
+      line-height: 1.6;
+      color: #f0f0f5;
+      background: #0d0d0f;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+    input, button { font: inherit; }
+    :focus-visible { outline: 2px solid #7c6bff; outline-offset: 2px; }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* ── Background scene ── */
+    .bg-scene {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(124,107,255,0.18) 0%, transparent 60%),
+                  radial-gradient(ellipse 60% 50% at 80% 80%, rgba(124,107,255,0.10) 0%, transparent 55%),
+                  radial-gradient(ellipse 50% 40% at 10% 70%, rgba(232,160,69,0.07) 0%, transparent 50%),
+                  #0d0d0f;
+    }
+
+    /* Animated orbs */
+    .bg-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      animation: orb-drift 12s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+    .bg-orb--1 {
+      width: 420px; height: 420px;
+      top: -120px; left: -80px;
+      background: radial-gradient(circle, rgba(124,107,255,0.22) 0%, transparent 70%);
+      animation-duration: 14s;
+    }
+    .bg-orb--2 {
+      width: 360px; height: 360px;
+      bottom: -80px; right: -60px;
+      background: radial-gradient(circle, rgba(124,107,255,0.15) 0%, transparent 70%);
+      animation-duration: 18s;
+      animation-direction: alternate-reverse;
+    }
+    .bg-orb--3 {
+      width: 280px; height: 280px;
+      top: 40%; left: 60%;
+      background: radial-gradient(circle, rgba(232,160,69,0.10) 0%, transparent 70%);
+      animation-duration: 22s;
+    }
+    @keyframes orb-drift {
+      from { transform: translate(0, 0) scale(1); }
+      to   { transform: translate(30px, 20px) scale(1.08); }
+    }
+
+    /* Subtle grid overlay */
+    .bg-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+    }
+
+    /* ── Page layout ── */
+    .page-wrap {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    /* ── Login card ── */
+    .login-card {
+      width: 100%;
+      max-width: 420px;
+      background: rgba(22, 22, 26, 0.85);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 20px;
+      padding: 2.75rem 2.5rem 2.5rem;
+      box-shadow:
+        0 0 0 1px rgba(124,107,255,0.08),
+        0 8px 32px rgba(0,0,0,0.5),
+        0 32px 80px rgba(0,0,0,0.35),
+        inset 0 1px 0 rgba(255,255,255,0.06);
+
+      /* Entrance animation */
+      animation: card-enter 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+    @keyframes card-enter {
+      from { opacity: 0; transform: translateY(24px) scale(0.97); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* Shake on error */
+    .login-card--shake {
+      animation: card-shake 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    }
+    @keyframes card-shake {
+      10%, 90%  { transform: translateX(-3px); }
+      20%, 80%  { transform: translateX(4px); }
+      30%, 70%  { transform: translateX(-4px); }
+      40%, 60%  { transform: translateX(3px); }
+      50%       { transform: translateX(-2px); }
+    }
+
+    /* ── Logo section ── */
+    .login-logo {
+      text-align: center;
+      margin-bottom: 2.25rem;
+      animation: fade-up 0.5s 0.1s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .logo-icon-wrap {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(124,107,255,0.25) 0%, rgba(124,107,255,0.12) 100%);
+      border: 1px solid rgba(124,107,255,0.3);
+      box-shadow: 0 0 20px rgba(124,107,255,0.2), inset 0 1px 0 rgba(255,255,255,0.1);
+      margin-bottom: 1rem;
+      position: relative;
+    }
+    .logo-icon-wrap::after {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: 15px;
+      background: linear-gradient(135deg, rgba(124,107,255,0.4), transparent 60%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+    .logo-icon-wrap:hover::after { opacity: 1; }
+
+    .logo-icon-wrap svg {
+      width: 24px;
+      height: 24px;
+      color: #7c6bff;
+      filter: drop-shadow(0 0 8px rgba(124,107,255,0.6));
+    }
+
+    .login-logo__name {
+      font-family: 'Manrope', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #f0f0f5 0%, rgba(240,240,245,0.75) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.25rem;
+    }
+    .login-logo__sub {
+      font-size: 0.8125rem;
+      color: #6b6b82;
+      font-weight: 400;
+    }
+
+    /* ── Error banner ── */
+    .login-error {
+      display: none;
+      align-items: center;
+      gap: 0.625rem;
+      background: rgba(248, 113, 113, 0.1);
+      border: 1px solid rgba(248, 113, 113, 0.3);
+      border-left: 3px solid #f87171;
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+      font-size: 0.8125rem;
+      color: #fca5a5;
+      margin-bottom: 1.25rem;
+      animation: error-enter 0.25s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+    .login-error.visible {
+      display: flex;
+    }
+    @keyframes error-enter {
+      from { opacity: 0; transform: translateY(-6px); max-height: 0; }
+      to   { opacity: 1; transform: translateY(0); max-height: 80px; }
+    }
+    .login-error svg { flex-shrink: 0; color: #f87171; }
+
+    /* ── Form ── */
+    .login-form {
+      animation: fade-up 0.5s 0.2s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    .field-group {
+      margin-bottom: 1rem;
+    }
+
+    .field-label {
+      display: block;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: #a0a0b8;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.01em;
+    }
+
+    /* Input wrapper with icon */
+    .input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .input-icon {
+      position: absolute;
+      left: 0.875rem;
+      display: flex;
+      align-items: center;
+      pointer-events: none;
+      color: #55556a;
+      transition: color 0.2s ease;
+      z-index: 1;
+    }
+    .input-icon svg { width: 16px; height: 16px; }
+
+    .field-input {
+      width: 100%;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 10px;
+      padding: 0.75rem 1rem 0.75rem 2.75rem;
+      color: #f0f0f5;
+      font-size: 0.9375rem;
+      transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+      -webkit-appearance: none;
+    }
+    .field-input::placeholder {
+      color: #3d3d52;
+    }
+    .field-input:hover {
+      border-color: rgba(255,255,255,0.16);
+      background: rgba(255,255,255,0.06);
+    }
+    .field-input:focus {
+      outline: none;
+      border-color: rgba(124,107,255,0.6);
+      background: rgba(124,107,255,0.06);
+      box-shadow:
+        0 0 0 3px rgba(124,107,255,0.15),
+        0 1px 4px rgba(0,0,0,0.3);
+    }
+    .field-input:focus + .input-icon,
+    .input-wrap:focus-within .input-icon {
+      color: #7c6bff;
+    }
+
+    /* Password field with toggle */
+    .field-input--password {
+      padding-right: 3rem;
+    }
+    .password-toggle {
+      position: absolute;
+      right: 0.875rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #55556a;
+      padding: 0.25rem;
+      border-radius: 6px;
+      transition: color 0.2s ease, background 0.2s ease;
+    }
+    .password-toggle:hover { color: #8b8b9e; background: rgba(255,255,255,0.06); }
+    .password-toggle:focus-visible { outline: 2px solid #7c6bff; outline-offset: 1px; }
+    .password-toggle svg { width: 16px; height: 16px; }
+
+    /* ── Spacer ── */
+    .field-group--last { margin-bottom: 1.75rem; }
+
+    /* ── Submit button ── */
+    .btn-submit {
+      position: relative;
+      width: 100%;
+      padding: 0.8125rem 1.5rem;
+      background: linear-gradient(135deg, #7c6bff 0%, #6355e8 100%);
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      cursor: pointer;
+      overflow: hidden;
+      transition:
+        transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1),
+        box-shadow 0.2s ease,
+        opacity 0.2s ease;
+      box-shadow:
+        0 4px 16px rgba(124,107,255,0.35),
+        0 1px 4px rgba(0,0,0,0.3),
+        inset 0 1px 0 rgba(255,255,255,0.15);
+    }
+
+    /* Shimmer overlay */
+    .btn-submit::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+      transition: left 0.5s ease;
+      pointer-events: none;
+    }
+    .btn-submit:hover::before { left: 150%; }
+
+    .btn-submit:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow:
+        0 6px 24px rgba(124,107,255,0.45),
+        0 2px 8px rgba(0,0,0,0.3),
+        inset 0 1px 0 rgba(255,255,255,0.15);
+    }
+    .btn-submit:active:not(:disabled) {
+      transform: translateY(0);
+      box-shadow:
+        0 2px 8px rgba(124,107,255,0.3),
+        inset 0 1px 0 rgba(255,255,255,0.1);
+    }
+    .btn-submit:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+    /* Button content states */
+    .btn-submit__content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: opacity 0.15s ease;
+    }
+    .btn-submit.loading .btn-submit__content {
+      opacity: 0;
+    }
+
+    /* Spinner */
+    .btn-submit__spinner {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.15s ease;
+    }
+    .btn-submit.loading .btn-submit__spinner {
+      opacity: 1;
+    }
+    .spinner-ring {
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* ── Footer ── */
+    .login-footer {
+      text-align: center;
+      margin-top: 1.75rem;
+      font-size: 0.75rem;
+      color: #3d3d52;
+      animation: fade-up 0.5s 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+    .login-footer span {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 100px;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 480px) {
+      .login-card {
+        padding: 2rem 1.5rem 1.75rem;
+        border-radius: 16px;
+        /* On mobile, show as bottom sheet feel */
+        box-shadow:
+          0 0 0 1px rgba(124,107,255,0.06),
+          0 -4px 32px rgba(0,0,0,0.4),
+          0 8px 32px rgba(0,0,0,0.5);
+      }
+      body { overflow: auto; }
+      .page-wrap { justify-content: center; }
+      .bg-orb--1 { width: 280px; height: 280px; }
+      .bg-orb--2 { width: 240px; height: 240px; }
+    }
+
+    /* ── Success state ── */
+    .login-card--success {
+      animation: card-success 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+    @keyframes card-success {
+      to { opacity: 0; transform: scale(0.96) translateY(-8px); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Background -->
+<div class="bg-scene" aria-hidden="true">
+  <div class="bg-grid"></div>
+  <div class="bg-orb bg-orb--1"></div>
+  <div class="bg-orb bg-orb--2"></div>
+  <div class="bg-orb bg-orb--3"></div>
+</div>
+
+<!-- Page -->
+<div class="page-wrap">
+  <div class="login-card" id="login-card" role="main">
+
+    <!-- Logo -->
+    <div class="login-logo">
+      <div style="display:flex;justify-content:center;margin-bottom:0">
+        <div class="logo-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6L12 2z"/>
+          </svg>
+        </div>
+      </div>
+      <div class="login-logo__name">Persona AI Studio</div>
+      <div class="login-logo__sub">Sign in to your workspace</div>
+    </div>
+
+    <!-- Error -->
+    <div class="login-error" id="login-error" role="alert" aria-live="polite">
+      <svg width="15" height="15" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+      </svg>
+      <span id="login-error-text"></span>
+    </div>
+
+    <!-- Form -->
+    <form class="login-form" id="login-form" onsubmit="doLogin(event)" novalidate>
+
+      <!-- Username -->
+      <div class="field-group">
+        <label class="field-label" for="username">Username</label>
+        <div class="input-wrap">
+          <span class="input-icon" aria-hidden="true">
+            <svg viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+            </svg>
+          </span>
+          <input
+            class="field-input"
+            type="text"
+            id="username"
+            name="username"
+            placeholder="Enter your username"
+            autocomplete="username"
+            autocapitalize="none"
+            spellcheck="false"
+            autofocus
+            required
+            aria-required="true"
+          />
+        </div>
+      </div>
+
+      <!-- Password -->
+      <div class="field-group field-group--last">
+        <label class="field-label" for="password">Password</label>
+        <div class="input-wrap">
+          <span class="input-icon" aria-hidden="true">
+            <svg viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
+            </svg>
+          </span>
+          <input
+            class="field-input field-input--password"
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Enter your password"
+            autocomplete="current-password"
+            required
+            aria-required="true"
+          />
+          <button
+            type="button"
+            class="password-toggle"
+            id="pw-toggle"
+            onclick="togglePassword()"
+            aria-label="Show password"
+            tabindex="0"
+          >
+            <!-- Eye icon (shown when password hidden) -->
+            <svg id="eye-show" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+              <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
+            </svg>
+            <!-- Eye-off icon (shown when password visible) -->
+            <svg id="eye-hide" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" style="display:none">
+              <path fill-rule="evenodd" d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074l-1.78-1.781zm4.261 4.26l1.514 1.515a2.003 2.003 0 012.45 2.45l1.514 1.514a4 4 0 00-5.478-5.478z" clip-rule="evenodd"/>
+              <path d="M12.454 16.697L9.75 13.992a4 4 0 01-3.742-3.741L2.335 6.578A9.98 9.98 0 00.458 10c1.274 4.057 5.064 7 9.542 7 .847 0 1.669-.105 2.454-.303z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Submit -->
+      <button class="btn-submit" type="submit" id="login-btn" aria-live="polite">
+        <span class="btn-submit__content">
+          <svg width="15" height="15" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M3 3a1 1 0 011 1v12a1 1 0 11-2 0V4a1 1 0 011-1zm7.707 3.293a1 1 0 010 1.414L9.414 9H17a1 1 0 110 2H9.414l1.293 1.293a1 1 0 01-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0z" clip-rule="evenodd"/>
+          </svg>
+          Sign In
+        </span>
+        <span class="btn-submit__spinner" aria-hidden="true">
+          <div class="spinner-ring"></div>
+        </span>
+      </button>
+
+    </form>
+  </div>
+
+  <!-- Footer -->
+  <div class="login-footer" aria-label="Version">
+    <span>Persona AI Studio &nbsp;·&nbsp; v2.0</span>
+  </div>
+</div>
+
+<script>
+// If already logged in, redirect to dashboard
+if (localStorage.getItem('persona_token')) {
+  window.location.href = '/index.html';
+}
+
+function togglePassword() {
+  const input = document.getElementById('password');
+  const btn   = document.getElementById('pw-toggle');
+  const show  = document.getElementById('eye-show');
+  const hide  = document.getElementById('eye-hide');
+  const isHidden = input.type === 'password';
+  input.type = isHidden ? 'text' : 'password';
+  show.style.display = isHidden ? 'none' : '';
+  hide.style.display = isHidden ? '' : 'none';
+  btn.setAttribute('aria-label', isHidden ? 'Hide password' : 'Show password');
+}
+
+function setLoading(on) {
+  const btn = document.getElementById('login-btn');
+  btn.disabled = on;
+  btn.classList.toggle('loading', on);
+  btn.setAttribute('aria-busy', on ? 'true' : 'false');
+}
+
+function showError(msg) {
+  const errEl   = document.getElementById('login-error');
+  const errText = document.getElementById('login-error-text');
+  const card    = document.getElementById('login-card');
+  errText.textContent = msg;
+  errEl.classList.add('visible');
+  // Shake the card
+  card.classList.remove('login-card--shake');
+  void card.offsetWidth; // reflow to restart animation
+  card.classList.add('login-card--shake');
+  setTimeout(() => card.classList.remove('login-card--shake'), 500);
+}
+
+function hideError() {
+  document.getElementById('login-error').classList.remove('visible');
+}
+
+async function doLogin(e) {
+  e.preventDefault();
+  const username = document.getElementById('username').value.trim();
+  const password = document.getElementById('password').value;
+
+  hideError();
+
+  // Basic client-side validation
+  if (!username) { showError('Please enter your username.'); return; }
+  if (!password)  { showError('Please enter your password.'); return; }
+
+  setLoading(true);
+
+  try {
+    const res = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password }),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.detail || 'Invalid username or password.');
+    }
+    const data = await res.json();
+    localStorage.setItem('persona_token', data.token);
+
+    // Success — animate out then redirect
+    const card = document.getElementById('login-card');
+    card.classList.add('login-card--success');
+    setTimeout(() => { window.location.href = '/index.html'; }, 350);
+  } catch (err) {
+    setLoading(false);
+    showError(err.message);
+    // Refocus the appropriate field
+    const usernameEl = document.getElementById('username');
+    const passwordEl = document.getElementById('password');
+    if (!usernameEl.value.trim()) {
+      usernameEl.focus();
+    } else {
+      passwordEl.focus();
+      passwordEl.select();
+    }
+  }
+}
+</script>
+</body>
+</html>
