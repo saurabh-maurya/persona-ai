@@ -158,7 +158,11 @@ step "Installing Python dependencies"
 # supports the active Python (greenlet 3.1.1+ covers 3.12/3.13/3.14).
 "$VENV_PIP" install --upgrade "greenlet>=3.1.1" --quiet
 
-"$VENV_PIP" install -r "$BACKEND_DIR/requirements.txt"
+# PYO3_USE_ABI3_FORWARD_COMPATIBILITY lets Rust/PyO3-based packages (pydantic-core,
+# cryptography, etc.) build against Python 3.14 even if their bundled PyO3 version
+# declares an older maximum. Pydantic >=2.11 ships PyO3 0.23 which supports 3.14
+# natively, so this flag is mainly a safety net for other packages.
+PYO3_USE_ABI3_FORWARD_COMPATIBILITY=1 "$VENV_PIP" install -r "$BACKEND_DIR/requirements.txt"
 success "Python dependencies installed"
 
 # ── Step 7: Create .env ───────────────────────────────────────────────────────
