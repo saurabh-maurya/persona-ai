@@ -75,11 +75,15 @@ if [ "$PKG_MANAGER" = "apt" ]; then
     success "System build tools ready"
 fi
 
-# ── Step 4: Python 3.12 ───────────────────────────────────────────────────────
-# Pin to 3.12 — newer versions (3.13/3.14) may lack prebuilt wheels for some
-# C-extension packages (greenlet, pymongo, etc.) and will fail to compile
-# without dev headers that aren't always installed by default.
-step "Setting up Python 3.12"
+# ── Step 4: Python ────────────────────────────────────────────────────────────
+# Prefer Python 3.12 (stable, well-supported wheels for all deps).
+# Newer system Pythons (3.13/3.14) often lack prebuilt wheels for C-extension
+# packages (greenlet, pymongo) and will fail to compile without dev headers.
+# We try deadsnakes PPA for 3.12, then fall back to the system python3 with
+# its matching dev headers installed.
+step "Setting up Python"
+
+PYTHON=""
 
 if [ "$PKG_MANAGER" = "brew" ]; then
     if ! command -v python3.12 >/dev/null 2>&1; then
@@ -87,16 +91,36 @@ if [ "$PKG_MANAGER" = "brew" ]; then
     fi
     PYTHON="python3.12"
 else
-    # Install python3.12 + venv + dev headers explicitly.
-    # Newer Ubuntu ships python3.14 as the default python3; we avoid it here.
+    # Try to get Python 3.12 via deadsnakes PPA
     if ! command -v python3.12 >/dev/null 2>&1; then
-        info "python3.12 not found — adding deadsnakes PPA..."
-        sudo apt-get install -y software-properties-common
-        sudo add-apt-repository -y ppa:deadsnakes/ppa
-        sudo apt-get update -qq
+        info "Python 3.12 not found — trying deadsnakes PPA..."
+        sudo apt-get install -y software-properties-common >/dev/null 2>&1 || true
+        if command -v add-apt-repository >/dev/null 2>&1; then
+            sudo add-apt-repository -y ppa:deadsnakes/ppa >/dev/null 2>&1 || true
+            sudo apt-get update -qq
+            sudo apt-get install -y python3.12 python3.12-venv python3.12-dev 2>/dev/null || true
+        fi
     fi
-    sudo apt-get install -y python3.12 python3.12-venv python3.12-dev
-    PYTHON="python3.12"
+
+    if command -v python3.12 >/dev/null 2>&1; then
+        # Ensure dev headers + venv are present for 3.12
+        sudo apt-get install -y python3.12-venv python3.12-dev 2>/dev/null || true
+        PYTHON="python3.12"
+        success "Using Python 3.12 (pinned)"
+    else
+        # Fall back to the system python3 — install its matching dev headers
+        warn "Python 3.12 not available via PPA — using system python3"
+        SYSPY=$(command -v python3 2>/dev/null || true)
+        if [ -z "$SYSPY" ]; then
+            error "No python3 found. Install Python manually and re-run setup."
+            exit 1
+        fi
+        PY_VER=$("$SYSPY" -c "import sys; print('{}.{}'.format(sys.version_info.major, sys.version_info.minor))")
+        info "Installing dev headers for Python ${PY_VER}..."
+        sudo apt-get install -y "python${PY_VER}-dev" "python${PY_VER}-venv" 2>/dev/null || \
+            sudo apt-get install -y python3-dev python3-venv 2>/dev/null || true
+        PYTHON="$SYSPY"
+    fi
 fi
 
 success "Using Python: $($PYTHON --version)"
