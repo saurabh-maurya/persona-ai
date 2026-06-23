@@ -1,18 +1,18 @@
-#!/usr/bin/env bash
+#!/bin/bash
 # =============================================================================
 # Persona AI Studio — Linux Startup Script (no Docker)
 #
 # Usage:
-#   ./start-linux.sh            — kill any existing instance, then start
-#   ./start-linux.sh stop       — stop running instance
-#   ./start-linux.sh restart    — stop + start
-#   ./start-linux.sh status     — show process and API health
-#   ./start-linux.sh logs       — tail the backend log
+#   bash start-linux.sh            — kill any existing instance, then start
+#   bash start-linux.sh stop       — stop running instance
+#   bash start-linux.sh restart    — stop + start
+#   bash start-linux.sh status     — show process and API health
+#   bash start-linux.sh logs       — tail the backend log
 # =============================================================================
 
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 BACKEND_DIR="$SCRIPT_DIR/backend"
 VENV_DIR="$BACKEND_DIR/.venv"
 ENV_FILE="$SCRIPT_DIR/.env"
@@ -27,12 +27,12 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 CYAN='\033[0;36m'
 BOLD='\033[1m'
-RESET='\033[0m'
+NC='\033[0m'
 
-info()    { echo -e "${CYAN}[INFO]${RESET}  $*"; }
-success() { echo -e "${GREEN}[OK]${RESET}    $*"; }
-warn()    { echo -e "${YELLOW}[WARN]${RESET}  $*"; }
-err()     { echo -e "${RED}[ERROR]${RESET} $*" >&2; }
+info()    { printf "${CYAN}[INFO]${NC}  %s\n" "$*"; }
+success() { printf "${GREEN}[OK]${NC}    %s\n" "$*"; }
+warn()    { printf "${YELLOW}[WARN]${NC}  %s\n" "$*"; }
+err()     { printf "${RED}[ERROR]${NC} %s\n" "$*" >&2; }
 
 CMD="${1:-start}"
 
@@ -40,34 +40,31 @@ CMD="${1:-start}"
 
 load_env() {
     if [ ! -f "$ENV_FILE" ]; then
-        err ".env not found at $ENV_FILE — run ./setup.sh first."
+        err ".env not found at $ENV_FILE — run: bash setup.sh"
         exit 1
     fi
     set -o allexport
-    # shellcheck disable=SC1090
-    source "$ENV_FILE"
+    . "$ENV_FILE"
     set +o allexport
 }
 
 check_venv() {
     if [ ! -x "$VENV_DIR/bin/uvicorn" ]; then
-        err "Virtual environment not found at $VENV_DIR — run ./setup.sh first."
+        err "Virtual environment not found at $VENV_DIR — run: bash setup.sh"
         exit 1
     fi
 }
 
-# Kill any existing process tracked by PID file, then also sweep by port
 kill_existing() {
-    # Kill via PID file if present
     if [ -f "$PID_FILE" ]; then
-        local pid
         pid=$(cat "$PID_FILE")
         if kill -0 "$pid" 2>/dev/null; then
             info "Killing existing API process (pid $pid)..."
             kill "$pid" 2>/dev/null || true
-            local waited=0
-            while kill -0 "$pid" 2>/dev/null && [ $waited -lt 8 ]; do
-                sleep 1; waited=$((waited + 1))
+            waited=0
+            while kill -0 "$pid" 2>/dev/null && [ "$waited" -lt 8 ]; do
+                sleep 1
+                waited=$((waited + 1))
             done
             kill -9 "$pid" 2>/dev/null || true
             success "Stopped pid $pid"
@@ -75,8 +72,7 @@ kill_existing() {
         rm -f "$PID_FILE"
     fi
 
-    # Also kill anything holding our port (belt-and-suspenders)
-    local port_pid
+    # Also kill anything still holding the port
     port_pid=$(ss -tlnp "sport = :${API_PORT}" 2>/dev/null \
         | awk '/LISTEN/{match($0,/pid=([0-9]+)/,a); if(a[1]) print a[1]}' \
         | head -1 || true)
@@ -103,18 +99,18 @@ start_api() {
 }
 
 wait_healthy() {
-    echo -n "  Waiting for API to be ready"
-    local i=0
-    while [ $i -lt 30 ]; do
-        if curl -sf "http://localhost:${API_PORT}/api/health" &>/dev/null; then
-            echo -e " ${GREEN}✓${RESET}"
+    printf "  Waiting for API to be ready"
+    i=0
+    while [ "$i" -lt 30 ]; do
+        if curl -sf "http://localhost:${API_PORT}/api/health" >/dev/null 2>&1; then
+            printf " ${GREEN}✓${NC}\n"
             return 0
         fi
-        echo -n "."
+        printf "."
         sleep 1
         i=$((i + 1))
     done
-    echo -e " ${RED}✗ timed out${RESET}"
+    printf " ${RED}✗ timed out${NC}\n"
     err "API did not become healthy. Last 20 lines of $LOG_FILE:"
     tail -20 "$LOG_FILE" 2>/dev/null || true
     return 1
@@ -133,13 +129,13 @@ do_start() {
     start_api
     wait_healthy
 
-    echo ""
-    echo -e "${BOLD}${GREEN}Persona AI Studio is running${RESET}"
-    echo -e "  Dashboard : ${CYAN}http://localhost:${API_PORT}${RESET}"
-    echo -e "  API docs  : ${CYAN}http://localhost:${API_PORT}/api/docs${RESET}"
-    echo -e "  Log       : ${CYAN}$LOG_FILE${RESET}"
-    echo -e "  Stop      : ${CYAN}./start-linux.sh stop${RESET}"
-    echo ""
+    printf "\n"
+    printf "${BOLD}${GREEN}Persona AI Studio is running${NC}\n"
+    printf "  Dashboard : ${CYAN}http://localhost:${API_PORT}${NC}\n"
+    printf "  API docs  : ${CYAN}http://localhost:${API_PORT}/api/docs${NC}\n"
+    printf "  Log       : ${CYAN}%s${NC}\n" "$LOG_FILE"
+    printf "  Stop      : ${CYAN}bash start-linux.sh stop${NC}\n"
+    printf "\n"
 }
 
 do_stop() {
@@ -158,19 +154,18 @@ do_restart() {
 
 do_status() {
     load_env 2>/dev/null || true
-    echo ""
+    printf "\n"
     if is_running; then
-        echo -e "  ${GREEN}●${RESET} API   running  (pid $(cat "$PID_FILE"))"
+        printf "  ${GREEN}●${NC} API   running  (pid %s)\n" "$(cat "$PID_FILE")"
     else
-        echo -e "  ${RED}●${RESET} API   stopped"
+        printf "  ${RED}●${NC} API   stopped\n"
     fi
-
-    if curl -sf "http://localhost:${API_PORT}/api/health" &>/dev/null; then
-        echo -e "  ${GREEN}●${RESET} Health check passed"
+    if curl -sf "http://localhost:${API_PORT}/api/health" >/dev/null 2>&1; then
+        printf "  ${GREEN}●${NC} Health check passed\n"
     else
-        echo -e "  ${RED}●${RESET} Health check failed"
+        printf "  ${RED}●${NC} Health check failed\n"
     fi
-    echo ""
+    printf "\n"
 }
 
 do_logs() {
@@ -191,9 +186,7 @@ case "$CMD" in
     status)    do_status ;;
     logs)      do_logs ;;
     *)
-        echo ""
-        echo -e "Usage: ${CYAN}./start-linux.sh${RESET} [start|stop|restart|status|logs]"
-        echo ""
+        printf "\nUsage: ${CYAN}bash start-linux.sh${NC} [start|stop|restart|status|logs]\n\n"
         exit 1
         ;;
 esac
