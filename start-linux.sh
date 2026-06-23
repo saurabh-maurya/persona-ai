@@ -43,9 +43,8 @@ load_env() {
         err ".env not found at $ENV_FILE — run: bash setup.sh"
         exit 1
     fi
-    set -o allexport
-    . "$ENV_FILE"
-    set +o allexport
+    # Don't source .env — values with spaces or JSON break shell parsing.
+    # The backend loads .env itself via python-dotenv.
 }
 
 check_venv() {
