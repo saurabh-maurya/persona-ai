@@ -75,38 +75,28 @@ if [ "$PKG_MANAGER" = "apt" ]; then
     success "System build tools ready"
 fi
 
-# ── Step 4: Python 3.11+ ──────────────────────────────────────────────────────
-step "Checking Python 3.11+"
+# ── Step 4: Python 3.12 ───────────────────────────────────────────────────────
+# Pin to 3.12 — newer versions (3.13/3.14) may lack prebuilt wheels for some
+# C-extension packages (greenlet, pymongo, etc.) and will fail to compile
+# without dev headers that aren't always installed by default.
+step "Setting up Python 3.12"
 
-PYTHON=""
-for candidate in python3.12 python3.13 python3.11 python3; do
-    if command -v "$candidate" >/dev/null 2>&1; then
-        ver=$("$candidate" --version 2>&1 | grep -oE '[0-9]+\.[0-9]+' | head -1)
-        major="${ver%%.*}"
-        minor="${ver##*.}"
-        if [ "$major" -ge 3 ] && [ "$minor" -ge 11 ]; then
-            PYTHON="$candidate"
-            break
-        fi
-    fi
-done
-
-if [ -z "$PYTHON" ]; then
-    warn "Python 3.11+ not found — installing Python 3.12..."
-    if [ "$PKG_MANAGER" = "brew" ]; then
+if [ "$PKG_MANAGER" = "brew" ]; then
+    if ! command -v python3.12 >/dev/null 2>&1; then
         brew install python@3.12
-        PYTHON="python3.12"
-    else
-        # Add deadsnakes PPA if python3.12 not in default repos (Ubuntu 20.04/22.04)
-        if ! apt-cache show python3.12 >/dev/null 2>&1; then
-            info "Adding deadsnakes PPA for Python 3.12..."
-            sudo apt-get install -y software-properties-common
-            sudo add-apt-repository -y ppa:deadsnakes/ppa
-            sudo apt-get update -qq
-        fi
-        sudo apt-get install -y python3.12 python3.12-venv python3.12-dev
-        PYTHON="python3.12"
     fi
+    PYTHON="python3.12"
+else
+    # Install python3.12 + venv + dev headers explicitly.
+    # Newer Ubuntu ships python3.14 as the default python3; we avoid it here.
+    if ! command -v python3.12 >/dev/null 2>&1; then
+        info "python3.12 not found — adding deadsnakes PPA..."
+        sudo apt-get install -y software-properties-common
+        sudo add-apt-repository -y ppa:deadsnakes/ppa
+        sudo apt-get update -qq
+    fi
+    sudo apt-get install -y python3.12 python3.12-venv python3.12-dev
+    PYTHON="python3.12"
 fi
 
 success "Using Python: $($PYTHON --version)"
